@@ -4,10 +4,8 @@ import { Champion, Equipment, Relic, Spell } from '@src/poxApiDto'
 import localforage from 'localforage'
 
 enum ApiEndpoints {
-    GET_ALL_RUNES = '/api/feed.do?t=json',
+    GET_ALL_RUNES = 'https://raw.githubusercontent.com/sebakocz/poxfield/json-data/runes.json',
 }
-
-const poxApiUrl = 'https://www.poxnora.com'
 
 const CARD_GAME_DATA_EXPIRATION_TIME = 24 * 60 * 60 * 1000 * 7 // 7 days
 
