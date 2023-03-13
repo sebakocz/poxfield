@@ -4,7 +4,7 @@
             Hey!
         </div>
     </div>
-    <div class="h-32 bg-amber-200">Main</div>
+    <div class="h-32 bg-amber-200">Main!</div>
 </template>
 
 <script setup lang="ts">

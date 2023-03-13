@@ -7,6 +7,8 @@ enum ApiEndpoints {
     GET_ALL_RUNES = '/api/feed.do?t=json',
 }
 
+const poxApiUrl = 'https://www.poxnora.com'
+
 const CARD_GAME_DATA_EXPIRATION_TIME = 24 * 60 * 60 * 1000 * 7 // 7 days
 
 export const usePoxApi = () => {
