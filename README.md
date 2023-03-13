@@ -3,6 +3,7 @@
 ## :crossed_swords::saxophone: Competition & Inspiration
 - [Poxala](https://poxala-fa4ce.web.app/runes) - deck builder made by a community member
 - [PoxRaze](https://blacr7.github.io/PoxRaze/) - extended search made by a community member
+- [PoxBase](https://poxbase.net/) - pure search egine, great UI
 - [Poxpulse](https://github.com/winsomniak/poxpulse.com) - deprecated
 - [Moxfield](https://www.moxfield.com/) - professional mtg deck builder & more
 - [Great source of deck builders](https://www.similarweb.com/website/moxfield.com/competitors/)
