@@ -2,18 +2,28 @@ import { defineStore } from 'pinia'
 import { Champion, Equipment, Relic, Spell } from '@src/poxApiDto'
 
 export type RunesStore = {
-    champions: Champion[]
-    equipment: Equipment[]
-    relics: Relic[]
-    spells: Spell[]
+    allChampions: Champion[]
+    allEquipments: Equipment[]
+    allRelics: Relic[]
+    allSpells: Spell[]
 }
 
-export const useRunesStore = defineStore({
+export const useRunes = defineStore({
     id: 'runesStore',
     state: (): RunesStore => ({
-        champions: [],
-        equipment: [],
-        relics: [],
-        spells: [],
+        allChampions: [],
+        allEquipments: [],
+        allRelics: [],
+        allSpells: [],
     }),
+    getters: {
+        allRunes(): Champion[] | Equipment[] | Relic[] | Spell[] {
+            return [
+                ...this.allChampions,
+                ...this.allEquipments,
+                ...this.allRelics,
+                ...this.allSpells,
+            ]
+        },
+    },
 })

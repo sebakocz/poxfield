@@ -6,3 +6,9 @@
     </div>
     <div class="h-32 bg-amber-200">Main</div>
 </template>
+
+<script setup lang="ts">
+import { usePoxApi } from '@src/composables/poxApi'
+
+usePoxApi()
+</script>
