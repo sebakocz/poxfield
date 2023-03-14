@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import MainFrame from '@src/components/MainFrame.vue'
+import MainView from '@src/views/MainView.vue'
 </script>
 
 <template>
-    <MainFrame />
+    <MainView />
 </template>

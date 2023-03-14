@@ -7,7 +7,7 @@ enum ApiEndpoints {
     GET_ALL_RUNES = 'https://raw.githubusercontent.com/sebakocz/poxfield/json-data/runes.json',
 }
 
-const CARD_GAME_DATA_EXPIRATION_TIME = 24 * 60 * 60 * 1000 * 7 // 7 days
+const DATA_EXPIRATION_TIME = 24 * 60 * 60 * 1000 * 7 // 7 days
 
 export const usePoxApi = () => {
     const isFetching = ref(false)
@@ -41,7 +41,7 @@ export const usePoxApi = () => {
             if (dataFromDB) {
                 const dataTimestamp = dataFromDB.timestamp
                 const now = new Date().getTime()
-                if (now - dataTimestamp < CARD_GAME_DATA_EXPIRATION_TIME) {
+                if (now - dataTimestamp < DATA_EXPIRATION_TIME) {
                     // data is not expired, use it
                     allChampions.push(...dataFromDB.champs)
                     allEquipments.push(...dataFromDB.equips)
