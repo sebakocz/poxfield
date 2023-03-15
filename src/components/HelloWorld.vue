@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { usePoxApi } from '../composables/poxApi'
+import { usePoxApi } from '../api/poxApi'
 
 defineProps({
     msg: {

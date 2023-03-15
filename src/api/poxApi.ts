@@ -1,11 +1,8 @@
 import { ref } from 'vue'
 import { useRunes } from '@src/stores/runesStore'
-import { Champion, Equipment, Relic, Spell } from '@src/poxApiDto'
+import { Champion, Equipment, Relic, Spell } from './poxApiDto'
 import localforage from 'localforage'
-
-enum ApiEndpoints {
-    GET_ALL_RUNES = 'https://raw.githubusercontent.com/sebakocz/poxfield/json-data/runes.json',
-}
+import { ApiEndpoints } from '@src/api/poxApiLinks'
 
 const DATA_EXPIRATION_TIME = 24 * 60 * 60 * 1000 * 7 // 7 days
 

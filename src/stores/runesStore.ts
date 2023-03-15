@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Champion, Equipment, Relic, Spell } from '@src/poxApiDto'
+import { Champion, Equipment, Relic, Spell } from '../api/poxApiDto'
 
 export type RunesStore = {
     allChampions: Champion[]
