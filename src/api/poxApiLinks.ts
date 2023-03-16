@@ -25,7 +25,7 @@ const frameTypeMapper = (rarity: Rune['rarity']) => {
         case 'RARE':
             return 'rare'
         case 'LEGENDARY':
-            return 'leg'
+            return 'pe'
         case 'EXOTIC':
             return 'exotic'
     }
