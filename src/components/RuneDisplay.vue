@@ -1,9 +1,9 @@
 <template>
-    <div class="text-truncate w-full w-52 border border-amber-600 p-2">
+    <div class="text-truncate w-full w-52 p-2">
         <div class="relative mx-auto h-[211px] w-[170px]">
             <img
                 :src="runeImg"
-                class="absolute top-4 left-1"
+                class="absolute top-4 left-2"
                 alt="Rune Image"
             />
             <img

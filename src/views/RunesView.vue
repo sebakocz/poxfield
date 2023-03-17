@@ -13,6 +13,8 @@
                 v-for="rune in visibleList"
                 :key="rune.id"
                 :rune="rune"
+                class="duration-200 hover:scale-105"
+                @click="selectRune(rune)"
             />
         </div>
     </div>
@@ -23,6 +25,7 @@ import { useRunes } from '@src/stores/runesStore'
 import { computed } from 'vue'
 import RuneDisplay from '@src/components/RuneDisplay.vue'
 import { useVirtualScroll } from '@src/composables/virtualScroll'
+import { useInfo } from '@src/stores/infoStore'
 
 const runesStore = useRunes()
 
@@ -34,7 +37,7 @@ const runesStore = useRunes()
 //     ...runesStore.allSpells.slice(0, 10),
 // ])
 
-const testList = computed(() => runesStore.allChampions.slice(0, 51))
+const testList = computed(() => runesStore.allRunes)
 
 const {
     scrollContainer,
@@ -43,4 +46,6 @@ const {
     containerStyle,
     visibleList,
 } = useVirtualScroll(testList)
+
+const { selectRune } = useInfo()
 </script>
