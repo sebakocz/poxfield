@@ -6,7 +6,7 @@ export interface Rune {
     noraCost: number
     artist: string
     factions: string[]
-    rarity: 'COMMON' | 'UNCOMMON' | 'RARE' | 'LEGENDARY' | 'EXOTIC'
+    rarity: 'COMMON' | 'UNCOMMON' | 'RARE' | 'LEGENDARY' | 'EXOTIC' | 'LIMITED'
     runeSet: string
     forSale: boolean
     allowRanked: boolean

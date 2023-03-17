@@ -28,22 +28,25 @@ export const usePoxApi = () => {
         if (allRunes.length || isFetching.value) return
 
         try {
-            const dataFromDB = (await db.getItem('runes')) as {
-                champs: Champion[]
-                equips: Equipment[]
-                relics: Relic[]
-                spells: Spell[]
-                timestamp: number
-            }
-            if (dataFromDB) {
-                const dataTimestamp = dataFromDB.timestamp
+            const champsFromDB = (await db.getItem('champs')) as Champion[]
+            const equipsFromDB = (await db.getItem('equips')) as Equipment[]
+            const relicsFromDB = (await db.getItem('relics')) as Relic[]
+            const spellsFromDB = (await db.getItem('spells')) as Spell[]
+            const timestampFromDB = (await db.getItem('timestamp')) as number
+            if (
+                champsFromDB &&
+                equipsFromDB &&
+                relicsFromDB &&
+                spellsFromDB &&
+                timestampFromDB
+            ) {
                 const now = new Date().getTime()
-                if (now - dataTimestamp < DATA_EXPIRATION_TIME) {
+                if (now - timestampFromDB < DATA_EXPIRATION_TIME) {
                     // data is not expired, use it
-                    allChampions.push(...dataFromDB.champs)
-                    allEquipments.push(...dataFromDB.equips)
-                    allRelics.push(...dataFromDB.relics)
-                    allSpells.push(...dataFromDB.spells)
+                    allChampions.push(...champsFromDB)
+                    allEquipments.push(...equipsFromDB)
+                    allRelics.push(...relicsFromDB)
+                    allSpells.push(...spellsFromDB)
                     console.log('IndexedDB: Runes loaded from cache!')
                     return
                 }
@@ -61,25 +64,25 @@ export const usePoxApi = () => {
             fetchConfig.forEach((config) => {
                 try {
                     const { key, array } = config
-                    const rune = data[key] as
+                    const runes = data[key] as
                         | Champion[]
                         | Equipment[]
                         | Relic[]
                         | Spell[]
-                    array.push(...rune)
+                    const uniqueRunes = runes.filter(
+                        (rune) => rune.rarity !== 'LIMITED'
+                    )
+                    array.push(...uniqueRunes)
+                    db.setItem(key, uniqueRunes)
                 } catch (error) {
                     console.error(`API: Error fetching ${config.key}!`, error)
+                    throw error
                 } finally {
                     console.log(`API: Done fetching ${config.key}!`)
                 }
             })
 
-            // store data with timestamp
-            const dataWithTimestamp = {
-                ...data,
-                timestamp: new Date().getTime(),
-            }
-            await db.setItem('runes', dataWithTimestamp)
+            await db.setItem('timestamp', new Date().getTime())
         } catch (error) {
             console.error('Error initializing runes!', error)
         }
