@@ -1,10 +1,11 @@
 <template>
     <div
-        ref="scrollable"
+        ref="viewContainer"
         class="h-full overflow-y-scroll p-2 will-change-transform"
         @scroll="onScroll"
     >
         <div
+            ref="scrollContainer"
             class="flex flex-wrap content-start justify-center"
             :style="containerStyle"
         >
@@ -19,8 +20,9 @@
 
 <script setup lang="ts">
 import { useRunes } from '@src/stores/runesStore'
-import { computed, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import RuneDisplay from '@src/components/RuneDisplay.vue'
+import debounce from 'lodash/debounce'
 
 const runesStore = useRunes()
 
@@ -34,43 +36,77 @@ const runesStore = useRunes()
 
 const testList = computed(() => runesStore.allChampions.slice(0, 51))
 
-const scrollable = ref<HTMLElement>()
-const scrollTop = ref(0)
-const onScroll = (enent: Event) => {
-    scrollTop.value = (enent.target as HTMLElement).scrollTop
-}
-
 const runeDisplayHeight = 228.6
 const runeDisplayWidth = 208
+// higher number = more items in buffer, smoother scrolling
+const bufferSize = 2
 
-const runesPerRow = computed(() =>
-    // mention 1920 is a fallback
-    Math.floor((scrollable.value?.clientWidth || 1920) / runeDisplayWidth)
+const scrollContainer = ref<HTMLElement>()
+const viewContainer = ref<HTMLElement>()
+
+const scrollTop = ref(0)
+const onScroll = debounce(
+    (event: Event) => {
+        scrollTop.value = (event.target as HTMLElement).scrollTop
+        console.log(scrollTop.value)
+    },
+    100,
+    { maxWait: 100 }
 )
+
+const runesPerRow = ref(0)
+const setRunesPerRow = () => {
+    if (!scrollContainer.value?.clientWidth)
+        throw new Error('No scroll container')
+    runesPerRow.value = Math.floor(
+        scrollContainer.value?.clientWidth / runeDisplayWidth
+    )
+}
+
+const batchSize = ref(0)
+const setBatchSize = () => {
+    if (!viewContainer.value?.clientHeight) throw new Error('No view container')
+    batchSize.value =
+        runesPerRow.value *
+        (Math.ceil(viewContainer.value?.clientHeight / runeDisplayHeight) +
+            bufferSize)
+}
+
+const onResize = () => {
+    if (scrollContainer.value) {
+        setRunesPerRow()
+        setBatchSize()
+    }
+}
+
+let resizeObserver: ResizeObserver
+
+onMounted(() => {
+    resizeObserver = new ResizeObserver(onResize)
+    resizeObserver.observe(scrollContainer.value as HTMLElement)
+})
+
+onUnmounted(() => {
+    resizeObserver.disconnect()
+})
+
 const totalHeight = computed(
     () =>
         Math.ceil(testList.value.length / runesPerRow.value) * runeDisplayHeight
 )
 
-// mention X is a buffer for when the user scrolls fast
-const batchSize = computed(() => runesPerRow.value * 2)
-
 const startIndex = computed(() =>
     Math.max(
         0,
         Math.floor(scrollTop.value / runeDisplayHeight) * runesPerRow.value -
-            batchSize.value
+            runesPerRow.value * bufferSize
     )
 )
 
 const endIndex = computed(() =>
     Math.min(
         testList.value.length,
-        Math.ceil(
-            (scrollTop.value + (scrollable.value?.clientHeight || 1920)) /
-                runeDisplayHeight
-        ) *
-            runesPerRow.value +
+        Math.floor(scrollTop.value / runeDisplayHeight) * runesPerRow.value +
             batchSize.value
     )
 )

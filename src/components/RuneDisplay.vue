@@ -1,5 +1,5 @@
 <template>
-    <div class="text-truncate w-full border border-amber-600 p-2 sm:w-52">
+    <div class="text-truncate w-full w-52 border border-amber-600 p-2">
         <div class="relative mx-auto h-[211px] w-[170px]">
             <img
                 :src="runeImg"
