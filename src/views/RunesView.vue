@@ -1,4 +1,5 @@
 <template>
+    <RuneSearchBar />
     <div
         ref="viewContainer"
         class="h-full overflow-y-scroll p-2 will-change-transform"
@@ -22,22 +23,13 @@
 
 <script setup lang="ts">
 import { useRunes } from '@src/stores/runesStore'
-import { computed } from 'vue'
 import { useVirtualScroll } from '@src/composables/virtualScroll'
 import { useInfo } from '@src/stores/infoStore'
 import RuneDisplayMedium from '@src/components/RuneDisplayMedium.vue'
+import RuneSearchBar from '@src/components/RuneSearchBar.vue'
+import { storeToRefs } from 'pinia'
 
-const runesStore = useRunes()
-
-// 10 of each rune type
-// const testList = computed(() => [
-//     ...runesStore.allChampions.slice(0, 10),
-//     ...runesStore.allEquipments.slice(0, 10),
-//     ...runesStore.allRelics.slice(0, 10),
-//     ...runesStore.allSpells.slice(0, 10),
-// ])
-
-const testList = computed(() => runesStore.allRunes)
+const { filteredList } = storeToRefs(useRunes())
 
 const {
     scrollContainer,
@@ -45,7 +37,7 @@ const {
     onScroll,
     containerStyle,
     visibleList,
-} = useVirtualScroll(testList)
+} = useVirtualScroll(filteredList as any)
 
 const { selectRune } = useInfo()
 </script>

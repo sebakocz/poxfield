@@ -11,7 +11,11 @@
             }"
             @click="currentRouteIndex = navRoutes.indexOf(route)"
         >
-            {{ route.name }}
+            {{
+                route.name === 'Runes'
+                    ? `Runes (${filteredList.length}/${allRunes.length})`
+                    : route.name
+            }}
         </div>
     </div>
     <div class="flex-grow overflow-hidden bg-gray-200">
@@ -28,8 +32,12 @@ import { navRoutes } from '@src/constants/nav'
 import RunesView from '@src/views/RunesView.vue'
 import FilterView from '@src/views/FilterView.vue'
 import BattleGroupView from '@src/views/BattleGroupView.vue'
+import { useRunes } from '@src/stores/runesStore'
+import { storeToRefs } from 'pinia'
 
 usePoxApi()
+
+const { filteredList, allRunes } = storeToRefs(useRunes())
 
 const currentRouteIndex = ref(0)
 </script>
