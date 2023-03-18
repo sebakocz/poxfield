@@ -10,7 +10,13 @@
 
 ## :derelict_house: Design Plan
 
+### Main Frames
 ![image](https://user-images.githubusercontent.com/44639352/224578422-33b2be7c-fef2-48c4-ba4c-0792e41e8472.png)
+
+---
+### Rune Info Modal
+![image](https://user-images.githubusercontent.com/44639352/226126402-63fd0646-9b6d-4151-9e85-b3b5cb1f6580.png)
+
 
 ## Stack
 - :green_heart::pineapple: Vite + Vue + Typescript + Pinia
