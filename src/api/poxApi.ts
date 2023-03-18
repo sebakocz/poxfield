@@ -4,7 +4,7 @@ import { Champion, Equipment, Relic, Spell } from './poxApiDto'
 import localforage from 'localforage'
 import { ApiEndpoints } from '@src/api/poxApiLinks'
 
-const CURRENT_VERSION = 1
+const CURRENT_VERSION = 2
 const DATA_EXPIRATION_TIME = 24 * 60 * 60 * 1000 * 7 // 7 days
 
 const DB_OPTIONS: LocalForageOptions = {

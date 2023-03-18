@@ -25,9 +25,14 @@
             <span class="highlight absolute top-7 left-0 right-0 text-xl">
                 {{ props.rune.name }}
             </span>
-            <span class="highlight absolute top-6 right-6 text-2xl">
-                {{ props.rune.noraCost }}
-            </span>
+            <transition name="fade" mode="out-in">
+                <span
+                    :key="props.rune.noraCost"
+                    class="highlight absolute top-6 right-6 text-2xl"
+                >
+                    {{ props.rune.noraCost }}
+                </span>
+            </transition>
             <span
                 v-if="'damage' in props.rune"
                 class="highlight absolute bottom-2.5 left-[13.5%] w-4 text-xl"
@@ -81,3 +86,15 @@ const rarityFrameImg = computed(() => getRarityFrameImgLarge(props.rune.rarity))
 const backgroundFrameImg = computed(() => getBackgroundFrameImgLarge())
 const iconsFrameImg = computed(() => getStatsFrameImg())
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+    scale: 0.9;
+}
+</style>

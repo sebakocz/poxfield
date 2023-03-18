@@ -10,15 +10,25 @@
                         class="w-9 rounded"
                     />
                 </div>
-                <div class="w-full rounded bg-gray-50 p-2">
+                <div
+                    class="w-full rounded bg-gray-50 p-2"
+                    :class="{
+                        'bg-yellow-50 outline outline-orange-500':
+                            ability.selected,
+                        'cursor-pointer hover:bg-gray-100':
+                            !ability.selected && 'default' in ability,
+                    }"
+                    @click="selectAbility(abilities.indexOf(ability))"
+                >
                     <div class="mb-1 flex gap-1">
                         <span
                             class="flex-grow text-sm font-semibold text-gray-600"
-                            >{{ ability.name }}:
+                            >{{ ability.name }}
+                            {{ ability.level ? `(${ability.level})` : '' }}
                         </span>
                         <span
                             v-if="ability.cooldown"
-                            class="rounded bg-gray-400 p-0.5 px-1 text-center text-xs font-semibold text-white"
+                            class="whitespace-nowrap rounded bg-gray-400 p-0.5 px-1 text-center text-xs font-semibold text-white"
                         >
                             CD: {{ ability.cooldown }}
                         </span>
@@ -27,12 +37,12 @@
                                 ability.activationType === 1 ||
                                 ability.activationType === 3
                             "
-                            class="rounded bg-gray-400 p-0.5 px-1 text-center text-xs font-semibold text-white"
+                            class="whitespace-nowrap rounded bg-gray-400 p-0.5 px-1 text-center text-xs font-semibold text-white"
                         >
                             AP: {{ ability.apCost }}
                         </span>
                         <span
-                            class="rounded bg-blue-600 p-0.5 px-1 text-center text-xs font-semibold text-white"
+                            class="whitespace-nowrap rounded bg-blue-600 p-0.5 px-1 text-center text-xs font-semibold text-white"
                         >
                             Nora: {{ ability.noraCost }}
                         </span>
@@ -54,4 +64,12 @@ defineProps<{
     title: string
     abilities: Ability[]
 }>()
+
+const emit = defineEmits<{
+    (event: 'selectAbility', index: number): void
+}>()
+
+const selectAbility = (index: number) => {
+    emit('selectAbility', index)
+}
 </script>

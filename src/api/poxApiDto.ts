@@ -42,6 +42,7 @@ export interface Spell extends Rune {
 }
 
 export interface Ability {
+    default: boolean
     id: number
     apCost: number
     name: string
@@ -51,6 +52,7 @@ export interface Ability {
     cooldown: number
     noraCost: number
     iconName: string
+    selected?: boolean
 }
 
 export interface AbilitySet {
