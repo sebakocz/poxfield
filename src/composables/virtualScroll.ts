@@ -22,7 +22,6 @@ export const useVirtualScroll = (inputList: ComputedRef<any[]>) => {
     const onScroll = debounce(
         (event: Event) => {
             scrollTop.value = (event.target as HTMLElement).scrollTop
-            console.log(scrollTop.value)
         },
         100,
         { maxWait: 100 }

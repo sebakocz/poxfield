@@ -3,7 +3,7 @@
         <div class="relative mx-auto h-[211px] w-[170px]">
             <img
                 :src="runeImg"
-                class="absolute top-4 left-2"
+                class="absolute left-0 right-0 top-0 bottom-2 mx-auto my-auto"
                 alt="Rune Image"
             />
             <img
@@ -19,7 +19,7 @@
             <img
                 v-if="'hitPoints' in props.rune"
                 :src="iconsFrameImg"
-                class="absolute top-0 left-0"
+                class="absolute w-full"
                 alt="Icons Frame Image"
             />
             <span class="highlight absolute top-1 left-0 right-0 text-sm">
@@ -63,11 +63,11 @@
 </template>
 
 <script setup lang="ts">
-import { Champion, Equipment, Relic, Spell } from '../api/poxApiDto'
+import { Champion, Equipment, Relic, Spell } from '@src/api/poxApiDto'
 import {
-    getBackgroundFrameImg,
-    getIconsFrameImg,
-    getRarityFrameImg,
+    getBackgroundFrameImgSmall,
+    getStatsFrameImg,
+    getRarityFrameImgSmall,
     getRuneImgMedium,
 } from '@src/api/poxApiLinks'
 import { computed } from 'vue'
@@ -77,19 +77,7 @@ const props = defineProps<{
 }>()
 
 const runeImg = computed(() => getRuneImgMedium(props.rune.hash))
-const rarityFrameImg = computed(() => getRarityFrameImg(props.rune.rarity))
-const backgroundFrameImg = computed(() => getBackgroundFrameImg())
-const iconsFrameImg = computed(() => getIconsFrameImg())
+const rarityFrameImg = computed(() => getRarityFrameImgSmall(props.rune.rarity))
+const backgroundFrameImg = computed(() => getBackgroundFrameImgSmall())
+const iconsFrameImg = computed(() => getStatsFrameImg())
 </script>
-
-<style scoped>
-.text-truncate {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.highlight {
-    color: #fff;
-    text-shadow: 1px 2px 1px #000000;
-}
-</style>

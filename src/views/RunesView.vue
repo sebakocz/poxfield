@@ -9,11 +9,11 @@
             class="flex flex-wrap content-start justify-center"
             :style="containerStyle"
         >
-            <RuneDisplay
+            <RuneDisplayMedium
                 v-for="rune in visibleList"
                 :key="rune.id"
                 :rune="rune"
-                class="duration-200 hover:scale-105"
+                class="cursor-pointer duration-200 hover:scale-105"
                 @click="selectRune(rune)"
             />
         </div>
@@ -23,9 +23,9 @@
 <script setup lang="ts">
 import { useRunes } from '@src/stores/runesStore'
 import { computed } from 'vue'
-import RuneDisplay from '@src/components/RuneDisplay.vue'
 import { useVirtualScroll } from '@src/composables/virtualScroll'
 import { useInfo } from '@src/stores/infoStore'
+import RuneDisplayMedium from '@src/components/RuneDisplayMedium.vue'
 
 const runesStore = useRunes()
 

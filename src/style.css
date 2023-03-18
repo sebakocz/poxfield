@@ -87,3 +87,40 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.highlight {
+  color: #fff;
+  text-shadow: 1px 2px 1px #000000;
+}
+
+/* For Webkit-based browsers (Chrome, Safari and Opera) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Light mode colors */
+.bg-primary { background-color: #2452a1; }
+.text-primary { color: #1D2A39; }
+.text-secondary { color: #4C5A6A; }
+.text-accent { color: #FF9A3E; }
+.border-color { border-color: #E0E4E9; }
+
+/* Dark mode colors */
+@media (prefers-color-scheme: dark) {
+  .bg-primary { background-color: #1D2A39; }
+  .text-primary { color: #FFFFFF; }
+  .text-secondary { color: #9EAEC5; }
+  .text-accent { color: #FF9A3E; }
+  .border-color { border-color: #3C4856; }
+}
