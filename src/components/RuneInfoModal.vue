@@ -12,7 +12,7 @@
                     <h2 class="text-xl font-bold">{{ selectedRune.name }}</h2>
                 </div>
                 <div class="flex-grow">
-                    <div class="flex">
+                    <div class="flex flex-wrap justify-center lg:flex-nowrap">
                         <div class="flex flex-col pl-2">
                             <RuneDisplayMedium
                                 v-if="isMobile"
@@ -69,7 +69,7 @@
 
                         <div
                             v-if="!selectedRune.flavorText"
-                            class="mx-2 flex w-full flex-col gap-2 text-left"
+                            class="mx-2 flex flex-col gap-2 text-left"
                         >
                             <AbilityBlock
                                 title="Level 2"
