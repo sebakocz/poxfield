@@ -2,7 +2,7 @@
     <RuneSearchBar />
     <div
         ref="viewContainer"
-        class="h-full overflow-y-scroll p-2 will-change-transform"
+        class="h-[90%] overflow-y-scroll p-2 will-change-transform"
         @scroll="onScroll"
     >
         <div

@@ -10,6 +10,6 @@ export const navRoutes: NavRoute[] = [
         name: 'Filter',
     },
     {
-        name: 'Battle Group',
+        name: 'Deck',
     },
 ]
