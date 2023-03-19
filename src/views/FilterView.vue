@@ -2,7 +2,7 @@
     <RuneSearchBar />
     <div class="h-[90%] overflow-y-auto">
         <div class="m-2 rounded border border-gray-500 p-2">
-            <h3 class="mb-3 text-lg font-semibold">Categories</h3>
+            <h3 class="text-lg font-semibold">Categories</h3>
             <div
                 class="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
             >
@@ -33,7 +33,7 @@
         </div>
 
         <div class="m-2 rounded border border-gray-500 p-2">
-            <h3 class="mb-3 text-lg font-semibold">Stats</h3>
+            <h3 class="text-lg font-semibold">Stats</h3>
             <div
                 class="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
             >
@@ -71,7 +71,7 @@
         </div>
 
         <div class="m-2 rounded border border-gray-500 p-2">
-            <h3 class="mb-3 text-lg font-semibold">Effects</h3>
+            <h3 class="text-lg font-semibold">Effects</h3>
             <div
                 class="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
             >
@@ -100,12 +100,21 @@
                 </div>
             </div>
         </div>
+
+        <button
+            class="w-[99%] rounded bg-blue-600 py-2 font-semibold text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            @click="resetFilters"
+        >
+            Reset Filters
+        </button>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useRunes } from '@src/stores/runesStore'
 import RuneSearchBar from '@src/components/RuneSearchBar.vue'
+import { storeToRefs } from 'pinia'
 
-const { categories, numbers, effects } = useRunes()
+const { categories, numbers, effects } = storeToRefs(useRunes())
+const { resetFilters } = useRunes()
 </script>
