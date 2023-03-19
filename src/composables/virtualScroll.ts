@@ -101,19 +101,8 @@ export const useVirtualScroll = (inputList: ComputedRef<any[]>) => {
         }px`,
     }))
 
-    // hacky attempt at removing duplicate items, idk where they're coming from
-    const uniqueInputList = computed(() => {
-        const uniqueItems = new Map()
-        inputList.value.forEach((item) => {
-            if (!uniqueItems.has(item.id)) {
-                uniqueItems.set(item.id, item)
-            }
-        })
-        return Array.from(uniqueItems.values())
-    })
-
     const visibleList = computed(() =>
-        uniqueInputList.value.slice(startIndex.value, endIndex.value)
+        inputList.value.slice(startIndex.value, endIndex.value)
     )
 
     return {

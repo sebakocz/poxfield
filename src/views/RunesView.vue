@@ -20,7 +20,7 @@
             </p>
             <RuneDisplayMedium
                 v-for="rune in visibleList"
-                :key="rune.id"
+                :key="rune.hash"
                 :rune="rune"
                 class="cursor-pointer duration-200 hover:scale-105"
                 @click="selectRune(rune)"
