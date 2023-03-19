@@ -1,4 +1,4 @@
-# Poxfield - Work in Progress
+# Poxfield
 
 
 ## Stack
