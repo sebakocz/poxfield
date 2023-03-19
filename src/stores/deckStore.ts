@@ -19,7 +19,7 @@ export const useDeck = defineStore('deckStore', () => {
     const deckLength = computed(() => deckRunes.value.length)
     const addRune = (rune: Rune) => {
         if (deckLength.value >= 30) return
-        if (countRune(rune.hash) >= 2) return
+        if (countRune(rune.hash) >= rune.deckLimit) return
 
         const newRune = JSON.parse(JSON.stringify(rune)) as DeckRune
         newRune.deckId = generateRandomId()
