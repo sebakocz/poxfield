@@ -1,5 +1,22 @@
 # Poxfield - Work in Progress
 
+
+## Stack
+- :green_heart::pineapple: Vite + Vue + Typescript + Pinia
+- :octocat::page_facing_up: static hosted files on Github Pages
+
+If you want to contribute, simply run these:
+```
+> npm install
+> npm run dev
+```
+
+## ⚖️ Legal
+
+The code base undergoes the [MIT License](https://github.com/sebakocz/poxfield/blob/main/LICENCE.md)
+
+All data and images related to Poxnora on this website are property of Desert Owl INC.
+
 ## :crossed_swords::saxophone: Competition & Inspiration
 - [Poxala](https://poxala-fa4ce.web.app/runes) - deck builder made by a community member
 - [PoxRaze](https://blacr7.github.io/PoxRaze/) - extended search made by a community member
@@ -16,8 +33,3 @@
 ---
 ### Rune Info Modal
 ![image](https://user-images.githubusercontent.com/44639352/226126402-63fd0646-9b6d-4151-9e85-b3b5cb1f6580.png)
-
-
-## Stack
-- :green_heart::pineapple: Vite + Vue + Typescript + Pinia
-- :octocat::page_facing_up: static hosted files on Github Pages
