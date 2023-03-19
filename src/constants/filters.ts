@@ -20,6 +20,7 @@ export type NumberFilter = {
 }
 
 export type EffectFilter = {
+    label: string
     key: 'effect'
     possibleValues: string[]
     query: string
@@ -105,6 +106,7 @@ export const numberFilters: NumberFilter[] = [
 
 export const effectFilters: EffectFilter[] = [
     {
+        label: 'Ability',
         key: 'effect',
         possibleValues: [],
         query: '',

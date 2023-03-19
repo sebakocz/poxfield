@@ -19,6 +19,31 @@ export const useRunes = defineStore('runesStore', () => {
         const runes = allRunes.value
         const championRunes = runes.filter((rune) => rune.type === 'Champion')
 
+        // unique ability names, starting + set abilities
+        const uniqueAbilities = [
+            ...new Set(
+                championRunes
+                    .map((rune) => rune.abilitySets)
+                    .flat()
+                    .map((set) => set?.abilities)
+                    .flat()
+                    .map((ability) => ability?.name)
+            ),
+            ...new Set(
+                championRunes
+                    .map((rune) => rune.startingAbilities)
+                    .flat()
+                    .map((ability) => ability?.name)
+            ),
+        ].sort()
+
+        // remove double entries
+        const uniqueAbilitiesSet = [...new Set(uniqueAbilities)]
+
+        effects.value.filter(
+            (filter) => filter.key === 'effect'
+        )[0].possibleValues = uniqueAbilitiesSet as string[]
+
         const uniqueClasses = new Set(
             championRunes.map((rune) => rune.classes).flat()
         )
@@ -130,6 +155,7 @@ export const useRunes = defineStore('runesStore', () => {
                     }
                 }
 
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 if (!rune[filter.key]?.includes(filter.query)) {
                     return false
@@ -139,9 +165,7 @@ export const useRunes = defineStore('runesStore', () => {
 
         // Number filters
         for (const filter of numbers.value) {
-            // if (filter.key in rune) {
-            //     return false
-            // }
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const value = rune[filter.key]
 
@@ -166,16 +190,14 @@ export const useRunes = defineStore('runesStore', () => {
 
         // Effect filters
         for (const filter of effects.value) {
-            if (filter.query && 'abilitySets' in rune) {
+            if (filter.query && rune.type === 'Champion') {
+                // check ability sets and starting abilities
                 const abilities = rune.abilitySets
                     ?.map((set) => set.abilities)
                     .flat()
+                    .concat(rune.startingAbilities ?? [])
 
-                if (
-                    !abilities?.some((a) =>
-                        a.shortDescription.includes(filter.query)
-                    )
-                ) {
+                if (!abilities?.some((a) => a.name === filter.query)) {
                     return false
                 }
             }
@@ -190,6 +212,7 @@ export const useRunes = defineStore('runesStore', () => {
         setupPossibleValues,
         categories,
         numbers,
+        effects,
         searchQuery,
     }
 })
