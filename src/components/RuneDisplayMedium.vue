@@ -1,6 +1,7 @@
 <template>
     <div class="text-truncate w-52 p-2">
         <div class="relative mx-auto h-[211px] w-[170px]">
+            <div class="absolute h-[105%] w-full rounded-2xl bg-black" />
             <img
                 :src="runeImg"
                 class="absolute left-0 right-0 top-0 bottom-2 mx-auto my-auto"
