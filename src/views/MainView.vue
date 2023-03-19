@@ -29,12 +29,20 @@
                     {{ runesStore.activeFilterKeys.length }}
                 </div>
             </transition>
+            <transition name="fade">
+                <div
+                    v-if="route.name === 'Deck' && deckStore.deckLength"
+                    class="ml-1 rounded-full bg-blue-600 py-0.5 px-1.5 text-xs font-semibold text-white shadow duration-200"
+                >
+                    {{ deckStore.deckLength }}
+                </div>
+            </transition>
         </div>
     </div>
     <div class="flex-grow overflow-hidden bg-gray-200">
         <RunesView v-if="currentRouteIndex === 0" />
         <FilterView v-else-if="currentRouteIndex === 1" />
-        <BattleGroupView v-else-if="currentRouteIndex === 2" />
+        <DeckView v-else-if="currentRouteIndex === 2" />
     </div>
 </template>
 
@@ -44,12 +52,14 @@ import { onMounted, ref } from 'vue'
 import { navRoutes } from '@src/constants/nav'
 import RunesView from '@src/views/RunesView.vue'
 import FilterView from '@src/views/FilterView.vue'
-import BattleGroupView from '@src/views/BattleGroupView.vue'
 import { useRunes } from '@src/stores/runesStore'
 import { useMobileCheck } from '@src/composables/mobileCheck'
+import { useDeck } from '@src/stores/deckStore'
+import DeckView from '@src/views/DeckView.vue'
 
 const poxApi = usePoxApi()
 const runesStore = useRunes()
+const deckStore = useDeck()
 
 onMounted(async () => {
     await poxApi.initializeRunes()

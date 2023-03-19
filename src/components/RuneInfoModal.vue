@@ -24,13 +24,36 @@
                             </span>
                             <div class="my-2 flex flex-col">
                                 <button
-                                    class="my-1 rounded bg-blue-600 p-2 font-bold text-white hover:bg-blue-700"
+                                    class="my-1 rounded bg-blue-600 p-2 font-bold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                                    :disabled="
+                                        deckStore.countRune(
+                                            selectedRune.hash
+                                        ) >= selectedRune.deckLimit ||
+                                        deckStore.deckLength >= 30
+                                    "
+                                    @click="deckStore.addRune(selectedRune)"
                                 >
                                     Add to deck!
+                                    <span>
+                                        ({{
+                                            deckStore.countRune(
+                                                selectedRune.hash
+                                            )
+                                        }}/{{ selectedRune.deckLimit }})
+                                    </span>
                                 </button>
-                                <span class="text-xs italic">
-                                    Max: {{ selectedRune.deckLimit }}
-                                </span>
+                                <button
+                                    v-if="infoStore.isDeck"
+                                    class="my-1 rounded bg-red-600 p-2 font-bold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                                    :disabled="
+                                        deckStore.countRune(
+                                            selectedRune.hash
+                                        ) <= 0
+                                    "
+                                    @click="handleRemove"
+                                >
+                                    Remove
+                                </button>
                             </div>
                             <div class="my-2 flex flex-col rounded p-2">
                                 <span v-if="selectedRune.size">
@@ -123,6 +146,7 @@
 
 <script setup lang="ts">
 import { useInfo } from '@src/stores/infoStore'
+import { useDeck } from '@src/stores/deckStore'
 import { computed, onMounted, onUnmounted } from 'vue'
 import RuneDisplayLarge from '@src/components/RuneDisplayLarge.vue'
 import RuneDisplayMedium from '@src/components/RuneDisplayMedium.vue'
@@ -131,6 +155,7 @@ import { Rune } from '@src/api/poxApiDto'
 import AbilityBlock from '@src/components/AbilityBlock.vue'
 
 const infoStore = useInfo()
+const deckStore = useDeck()
 
 const selectedRune = computed(() => infoStore.selectedRune as Rune)
 
@@ -155,6 +180,16 @@ onUnmounted(() => {
 })
 
 const { isMobile } = useMobileCheck()
+
+const handleRemove = () => {
+    deckStore.removeRune({
+        ...selectedRune,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        deckId: infoStore.deckId,
+    })
+    infoStore.clearSelectedRune()
+}
 </script>
 
 <style scoped>

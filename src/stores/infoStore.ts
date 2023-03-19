@@ -5,9 +5,18 @@ export const useInfo = defineStore({
     id: 'infoStore',
     state: () => ({
         selectedRune: null as Rune | null,
+        isDeck: false,
+        deckId: undefined as string | undefined,
     }),
     actions: {
-        selectRune(rune: Rune) {
+        selectRune(rune: Rune, isDeck = false, deckId?: string) {
+            this.deckId = deckId
+            this.isDeck = isDeck
+            if (isDeck) {
+                this.selectedRune = rune
+                return
+            }
+
             if (rune.type === 'Champion') {
                 const champ = JSON.parse(JSON.stringify(rune)) as Rune
                 champ.abilitySets?.forEach((abilitySet) => {

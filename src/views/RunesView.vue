@@ -24,6 +24,7 @@
                 :rune="rune"
                 class="cursor-pointer duration-200 hover:scale-105"
                 @click="selectRune(rune)"
+                @contextmenu.prevent="addRune(rune)"
             />
         </div>
     </div>
@@ -36,8 +37,11 @@ import { useInfo } from '@src/stores/infoStore'
 import RuneDisplayMedium from '@src/components/RuneDisplayMedium.vue'
 import RuneSearchBar from '@src/components/RuneSearchBar.vue'
 import { storeToRefs } from 'pinia'
+import { useDeck } from '@src/stores/deckStore'
 
 const { filteredList, allRunes } = storeToRefs(useRunes())
+const { addRune } = useDeck()
+const { selectRune } = useInfo()
 
 const {
     scrollContainer,
@@ -46,8 +50,6 @@ const {
     containerStyle,
     visibleList,
 } = useVirtualScroll(filteredList as any)
-
-const { selectRune } = useInfo()
 </script>
 
 <style scoped>
