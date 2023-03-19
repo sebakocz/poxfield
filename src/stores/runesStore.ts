@@ -218,6 +218,20 @@ export const useRunes = defineStore('runesStore', () => {
         searchQuery.value = ''
     }
 
+    const activeFilterKeys = computed(() => {
+        const categoriesActive = categories.value.filter(
+            (filter) => filter.query
+        )
+        const numbersActive = numbers.value.filter((filter) => filter.query)
+        const effectsActive = effects.value.filter((filter) => filter.query)
+
+        return [
+            ...categoriesActive.map((filter) => filter.key),
+            ...numbersActive.map((filter) => filter.key),
+            ...effectsActive.map((filter) => filter.key),
+        ]
+    })
+
     return {
         allRunes,
         filteredList,
@@ -227,5 +241,6 @@ export const useRunes = defineStore('runesStore', () => {
         effects,
         searchQuery,
         resetFilters,
+        activeFilterKeys,
     }
 })
