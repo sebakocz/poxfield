@@ -52,8 +52,6 @@ export const useRunes = defineStore('runesStore', () => {
     const filteredList = computed(() => {
         const searchTerm = searchQuery.value.toLowerCase()
 
-        // if (!searchTerm) return allRunes.value
-
         const filtered: Rune[] = []
 
         allRunes.value.forEach((rune) => {
@@ -133,10 +131,7 @@ export const useRunes = defineStore('runesStore', () => {
                 }
 
                 // @ts-ignore
-                else if (
-                    !(filter.key in rune) &&
-                    !rune[filter.key]?.includes(filter.query)
-                ) {
+                if (!rune[filter.key]?.includes(filter.query)) {
                     return false
                 }
             }

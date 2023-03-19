@@ -60,7 +60,9 @@ export const usePoxApi = () => {
                 )
                 newRunes.push(...uniqueRunes)
             }
-            const sortedRunes = newRunes.sort((a, b) => a.noraCost - b.noraCost)
+            const sortedRunes = newRunes.sort((a, b) =>
+                a.name.localeCompare(b.name)
+            )
 
             allRunes.push(...sortedRunes)
             await db.setItem('runes', sortedRunes)

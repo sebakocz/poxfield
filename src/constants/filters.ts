@@ -13,6 +13,7 @@ export type CatagoryFilter = {
 }
 
 export type NumberFilter = {
+    label: string
     key: 'noraCost' | 'attack' | 'defense' | 'health' | 'speed'
     condition: 'moreThan' | 'lessThan' | 'moreOrEqual' | 'lessOrEqual' | 'equal'
     query: number
@@ -71,26 +72,31 @@ export const categoryFilters: CatagoryFilter[] = [
 
 export const numberFilters: NumberFilter[] = [
     {
+        label: 'Nora Cost',
         key: 'noraCost',
         condition: 'moreOrEqual',
         query: 0,
     },
     {
+        label: 'Damage',
         key: 'attack',
         condition: 'moreOrEqual',
         query: 0,
     },
     {
+        label: 'Defense',
         key: 'defense',
         condition: 'moreOrEqual',
         query: 0,
     },
     {
+        label: 'Hit Points',
         key: 'health',
         condition: 'moreOrEqual',
         query: 0,
     },
     {
+        label: 'Speed',
         key: 'speed',
         condition: 'moreOrEqual',
         query: 0,
