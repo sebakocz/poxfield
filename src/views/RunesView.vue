@@ -10,6 +10,14 @@
             class="flex flex-wrap content-start justify-center"
             :style="containerStyle"
         >
+            <span v-if="!allRunes.length" class="spinner" />
+            <p
+                v-if="!visibleList.length && allRunes.length"
+                class="mt-20 text-xl"
+            >
+                No runes found. :( <br />
+                Try changing your filters.
+            </p>
             <RuneDisplayMedium
                 v-for="rune in visibleList"
                 :key="rune.id"
@@ -29,7 +37,7 @@ import RuneDisplayMedium from '@src/components/RuneDisplayMedium.vue'
 import RuneSearchBar from '@src/components/RuneSearchBar.vue'
 import { storeToRefs } from 'pinia'
 
-const { filteredList } = storeToRefs(useRunes())
+const { filteredList, allRunes } = storeToRefs(useRunes())
 
 const {
     scrollContainer,
@@ -41,3 +49,21 @@ const {
 
 const { selectRune } = useInfo()
 </script>
+
+<style scoped>
+.spinner {
+    margin: 100px auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-top-color: #2452a1;
+    animation: spin 0.8s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+</style>

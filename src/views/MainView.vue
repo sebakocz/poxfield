@@ -12,7 +12,9 @@
             @click="currentRouteIndex = navRoutes.indexOf(route)"
         >
             {{
-                route.name === 'Runes' && !isMobile
+                route.name === 'Runes' &&
+                !isMobile &&
+                runesStore.allRunes.length
                     ? `Runes (${runesStore.filteredList.length}/${runesStore.allRunes.length})`
                     : route.name
             }}
