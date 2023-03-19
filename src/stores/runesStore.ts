@@ -14,15 +14,9 @@ export const useRunes = defineStore('runesStore', () => {
     const allRunes = ref<Rune[]>([])
 
     const searchQuery = ref('')
-    const categories = ref<CatagoryFilter[]>(
-        JSON.parse(JSON.stringify(categoryFilters))
-    )
-    const numbers = ref<NumberFilter[]>(
-        JSON.parse(JSON.stringify(numberFilters))
-    )
-    const effects = ref<EffectFilter[]>(
-        JSON.parse(JSON.stringify(effectFilters))
-    )
+    const categories = ref<CatagoryFilter[]>([])
+    const numbers = ref<NumberFilter[]>([])
+    const effects = ref<EffectFilter[]>([])
 
     const setupPossibleValues = () => {
         const runes = allRunes.value
@@ -49,14 +43,14 @@ export const useRunes = defineStore('runesStore', () => {
         // remove double entries
         const uniqueAbilitiesSet = [...new Set(uniqueAbilities)]
 
-        effects.value.filter(
+        effectFilters.filter(
             (filter) => filter.key === 'effect'
         )[0].possibleValues = uniqueAbilitiesSet as string[]
 
         const uniqueClasses = new Set(
             championRunes.map((rune) => rune.classes).flat()
         )
-        categories.value.filter(
+        categoryFilters.filter(
             (filter) => filter.key === 'classes'
         )[0].possibleValues = [...uniqueClasses].sort() as string[]
 
@@ -64,7 +58,7 @@ export const useRunes = defineStore('runesStore', () => {
             championRunes.map((rune) => rune.races).flat()
         )
 
-        categories.value.filter(
+        categoryFilters.filter(
             (filter) => filter.key === 'races'
         )[0].possibleValues = [...uniqueRaces].sort() as string[]
 
@@ -72,15 +66,17 @@ export const useRunes = defineStore('runesStore', () => {
             runes.map((rune) => rune.factions).flat()
         )
 
-        categories.value.filter(
+        categoryFilters.filter(
             (filter) => filter.key === 'factions'
         )[0].possibleValues = [...uniqueFactions].sort()
 
         const uniqueRuneSets = new Set(runes.map((rune) => rune.runeSet))
 
-        categories.value.filter(
+        categoryFilters.filter(
             (filter) => filter.key === 'runeSet'
         )[0].possibleValues = [...uniqueRuneSets].sort()
+
+        resetFilters()
     }
 
     const filteredList = computed(() => {
@@ -220,7 +216,6 @@ export const useRunes = defineStore('runesStore', () => {
         numbers.value = JSON.parse(JSON.stringify(numberFilters))
         effects.value = JSON.parse(JSON.stringify(effectFilters))
         searchQuery.value = ''
-        setupPossibleValues()
     }
 
     return {
