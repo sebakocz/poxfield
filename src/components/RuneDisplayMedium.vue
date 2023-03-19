@@ -22,7 +22,19 @@
                 class="absolute w-full"
                 alt="Icons Frame Image"
             />
-            <span class="highlight absolute top-1 left-0 right-0 text-sm">
+            <div class="relative top-[4%] left-[10%] w-5">
+                <img
+                    :src="leftFactionImg"
+                    alt="Left Faction Image"
+                    class="absolute"
+                />
+                <img
+                    :src="rightFactionImg"
+                    alt="Right Faction Image"
+                    class="absolute"
+                />
+            </div>
+            <span class="highlight absolute top-2 left-0 right-0 text-xs">
                 {{ props.rune.name }}
             </span>
             <span class="highlight absolute top-1 right-[4%]">
@@ -69,6 +81,7 @@ import {
     getStatsFrameImg,
     getRarityFrameImgSmall,
     getRuneImgMedium,
+    getFactionImgs,
 } from '@src/api/poxApiLinks'
 import { computed } from 'vue'
 
@@ -80,4 +93,5 @@ const runeImg = computed(() => getRuneImgMedium(props.rune.hash))
 const rarityFrameImg = computed(() => getRarityFrameImgSmall(props.rune.rarity))
 const backgroundFrameImg = computed(() => getBackgroundFrameImgSmall())
 const iconsFrameImg = computed(() => getStatsFrameImg())
+const { rightFactionImg, leftFactionImg } = getFactionImgs(props.rune.factions)
 </script>

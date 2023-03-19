@@ -67,3 +67,34 @@ export const getIconImgSmall = (iconName: string) => {
     // example: https://d2aao99y1mip6n.cloudfront.net/images/ability_icons/large/icon_rend.gif
     return `${cloudfrontUrl}/images/ability_icons/small/icon_${iconName}.gif`
 }
+
+export const getFactionImgs = (factions: Rune['factions']) => {
+    // example: https://d2aao99y1mip6n.cloudfront.net/_themes/global/frames/large/faction_1_2.png
+    const left = FactionMapper(factions[0])
+    const right = FactionMapper(factions.length > 1 ? factions[1] : factions[0])
+    return {
+        leftFactionImg: `${cloudfrontUrl}/_themes/global/frames/large/faction_${left}_1.png`,
+        rightFactionImg: `${cloudfrontUrl}/_themes/global/frames/large/faction_${right}_2.png`,
+    }
+}
+
+const FactionMapper = (faction: Rune['factions'][0]) => {
+    switch (faction) {
+        case 'Forsaken Wastes':
+            return '1'
+        case 'Sundered Lands':
+            return '2'
+        case 'Ironfist Stronghold':
+            return '3'
+        case 'Underdepths':
+            return '4'
+        case "K'thir Forest":
+            return '5'
+        case 'Forglar Swamp':
+            return '6'
+        case 'Savage Tundra':
+            return '7'
+        case 'Shattered Peaks':
+            return '8'
+    }
+}
