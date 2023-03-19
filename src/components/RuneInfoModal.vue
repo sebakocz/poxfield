@@ -127,14 +127,12 @@ import { computed, onMounted, onUnmounted } from 'vue'
 import RuneDisplayLarge from '@src/components/RuneDisplayLarge.vue'
 import RuneDisplayMedium from '@src/components/RuneDisplayMedium.vue'
 import { useMobileCheck } from '@src/composables/mobileCheck'
-import { Champion, Relic, Spell, Equipment } from '@src/api/poxApiDto'
+import { Rune } from '@src/api/poxApiDto'
 import AbilityBlock from '@src/components/AbilityBlock.vue'
 
 const infoStore = useInfo()
 
-const selectedRune = computed(
-    () => infoStore.selectedRune as Champion | Relic | Equipment | Spell
-)
+const selectedRune = computed(() => infoStore.selectedRune as Rune)
 
 const closeOnClickOutside = (e: MouseEvent) => {
     if (e.target === e.currentTarget) {

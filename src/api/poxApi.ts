@@ -1,10 +1,10 @@
 import { ref } from 'vue'
 import { useRunes } from '@src/stores/runesStore'
-import { Champion, Equipment, Relic, Spell } from './poxApiDto'
+import { Rune } from './poxApiDto'
 import localforage from 'localforage'
 import { ApiEndpoints } from '@src/api/poxApiLinks'
 
-const CURRENT_VERSION = 2
+const CURRENT_VERSION = 3
 const DATA_EXPIRATION_TIME = 24 * 60 * 60 * 1000 * 7 // 7 days
 
 const DB_OPTIONS: LocalForageOptions = {
@@ -20,8 +20,7 @@ type DbTimestamp = {
 export const usePoxApi = () => {
     const isFetching = ref(false)
 
-    const { allChampions, allEquipments, allRelics, allSpells, allRunes } =
-        useRunes()
+    const { allRunes } = useRunes()
 
     const db = localforage.createInstance(DB_OPTIONS)
 
@@ -42,44 +41,35 @@ export const usePoxApi = () => {
     }
 
     const loadRunesFromDB = async () => {
-        const champsFromDB = (await db.getItem('champs')) as Champion[]
-        const equipsFromDB = (await db.getItem('equips')) as Equipment[]
-        const relicsFromDB = (await db.getItem('relics')) as Relic[]
-        const spellsFromDB = (await db.getItem('spells')) as Spell[]
-
-        allChampions.push(...champsFromDB)
-        allEquipments.push(...equipsFromDB)
-        allRelics.push(...relicsFromDB)
-        allSpells.push(...spellsFromDB)
+        const runesFromDB = (await db.getItem('runes')) as Rune[]
+        allRunes.push(...runesFromDB)
     }
 
     const saveRunesToDB = async (data: any) => {
-        const fetchConfig = [
-            { key: 'champs', array: allChampions },
-            { key: 'equips', array: allEquipments },
-            { key: 'relics', array: allRelics },
-            { key: 'spells', array: allSpells },
-        ]
-        fetchConfig.forEach((config) => {
-            try {
-                const { key, array } = config
-                const runes = data[key] as
-                    | Champion[]
-                    | Equipment[]
-                    | Relic[]
-                    | Spell[]
+        try {
+            const keys = ['champs', 'equips', 'relics', 'spells']
+            const types = ['Champion', 'Equipment', 'Relic', 'Spell']
+            const newRunes: Rune[] = []
+            for (const key of keys) {
+                const runes = data[key].map((rune: any) => ({
+                    ...rune,
+                    type: types[keys.indexOf(key)],
+                })) as Rune[]
                 const uniqueRunes = runes.filter(
                     (rune) => rune.rarity !== 'LIMITED'
                 )
-                array.push(...uniqueRunes)
-                db.setItem(key, uniqueRunes)
-            } catch (error) {
-                console.error(`API: Error fetching ${config.key}!`, error)
-                throw error
-            } finally {
-                console.log(`API: Done fetching ${config.key}!`)
+                newRunes.push(...uniqueRunes)
             }
-        })
+            const sortedRunes = newRunes.sort((a, b) => a.noraCost - b.noraCost)
+
+            allRunes.push(...sortedRunes)
+            await db.setItem('runes', sortedRunes)
+        } catch (error) {
+            console.error(`API: Error fetching runes!`, error)
+            throw error
+        } finally {
+            console.log(`API: Done fetching runes!`)
+        }
 
         await db.setItem('timestamp', {
             version: CURRENT_VERSION,
@@ -112,10 +102,9 @@ export const usePoxApi = () => {
         }
     }
 
-    initializeRunes()
-
     return {
         fetchAllRunes,
         isFetching,
+        initializeRunes,
     }
 }

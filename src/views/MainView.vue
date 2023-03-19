@@ -13,7 +13,7 @@
         >
             {{
                 route.name === 'Runes' && !isMobile
-                    ? `Runes (${filteredList.length}/${allRunes.length})`
+                    ? `Runes (${runesStore.filteredList.length}/${runesStore.allRunes.length})`
                     : route.name
             }}
         </div>
@@ -27,23 +27,20 @@
 
 <script setup lang="ts">
 import { usePoxApi } from '@src/api/poxApi'
-import { ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import { navRoutes } from '@src/constants/nav'
 import RunesView from '@src/views/RunesView.vue'
 import FilterView from '@src/views/FilterView.vue'
 import BattleGroupView from '@src/views/BattleGroupView.vue'
 import { useRunes } from '@src/stores/runesStore'
-import { storeToRefs } from 'pinia'
 import { useMobileCheck } from '@src/composables/mobileCheck'
 
-usePoxApi()
-
-const { filteredList, allRunes } = storeToRefs(useRunes())
-
+const poxApi = usePoxApi()
 const runesStore = useRunes()
 
-watch(allRunes, () => {
-    runesStore.setupPossibleValues(allRunes.value)
+onMounted(async () => {
+    await poxApi.initializeRunes()
+    await runesStore.setupPossibleValues()
 })
 
 const currentRouteIndex = ref(0)

@@ -1,4 +1,4 @@
-export interface Rune {
+export type Rune = {
     id: number
     name: string
     description: string
@@ -13,35 +13,29 @@ export interface Rune {
     tradeable: boolean
     hash: string
     deckLimit: number
+    // Champion properties
+    maxRng?: number
+    minRng?: number
+    defense?: number
+    speed?: number
+    damage?: number
+    hitPoints?: number
+    size?: string
+    classes?: string[]
+    races?: string[]
+    startingAbilities?: Ability[]
+    abilitySets?: AbilitySet[]
+    // Relic properties
+    // (Already included defense and hitPoints)
+    // Spell properties
+    cooldown?: number
+    // Equipment properties
+    // (No additional properties needed)
+    // custom property not included in API but very useful
+    type: 'Champion' | 'Equipment' | 'Relic' | 'Spell'
 }
 
-export interface Champion extends Rune {
-    maxRng: number
-    minRng: number
-    defense: number
-    speed: number
-    damage: number
-    hitPoints: number
-    size: string
-    classes: string[]
-    races: string[]
-    startingAbilities: Ability[]
-    abilitySets: AbilitySet[]
-}
-
-export type Equipment = Rune
-
-export interface Relic extends Rune {
-    defense: number
-    hitPoints: number
-    size: string
-}
-
-export interface Spell extends Rune {
-    cooldown: number
-}
-
-export interface Ability {
+export type Ability = {
     default: boolean
     id: number
     apCost: number
@@ -55,6 +49,6 @@ export interface Ability {
     selected?: boolean
 }
 
-export interface AbilitySet {
+export type AbilitySet = {
     abilities: Ability[]
 }

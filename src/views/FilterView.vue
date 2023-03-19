@@ -68,7 +68,6 @@
 </template>
 
 <script setup lang="ts">
-import RuneSearchBar from '@src/components/RuneSearchBar.vue'
 import { useRunes } from '@src/stores/runesStore'
 
 const { categories, numbers } = useRunes()

@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { Champion, Equipment, Relic, Spell } from '@src/api/poxApiDto'
+import { Rune } from '@src/api/poxApiDto'
 import {
     getBackgroundFrameImgLarge,
     getStatsFrameImg,
@@ -78,7 +78,7 @@ import {
 import { computed } from 'vue'
 
 const props = defineProps<{
-    rune: Champion | Equipment | Relic | Spell
+    rune: Rune
 }>()
 
 const runeImg = computed(() => getRuneImgLarge(props.rune.hash))

@@ -1,16 +1,16 @@
 import { defineStore } from 'pinia'
-import { Champion, Equipment, Relic, Spell } from '@src/api/poxApiDto'
+import { Rune } from '@src/api/poxApiDto'
 
 export const useInfo = defineStore({
     id: 'infoStore',
     state: () => ({
-        selectedRune: null as Champion | Equipment | Relic | Spell | null,
+        selectedRune: null as Rune | null,
     }),
     actions: {
-        selectRune(rune: Champion | Equipment | Relic | Spell) {
-            if ('abilitySets' in rune) {
-                const champ = JSON.parse(JSON.stringify(rune)) as Champion
-                champ.abilitySets.forEach((abilitySet) => {
+        selectRune(rune: Rune) {
+            if (rune.type === 'Champion') {
+                const champ = JSON.parse(JSON.stringify(rune)) as Rune
+                champ.abilitySets?.forEach((abilitySet) => {
                     abilitySet.abilities.forEach((ability) => {
                         ability.selected = ability.default
                     })
@@ -20,15 +20,17 @@ export const useInfo = defineStore({
                 return
             }
 
-            this.selectedRune = JSON.parse(JSON.stringify(rune))
+            this.selectedRune = JSON.parse(JSON.stringify(rune)) as Rune
         },
         clearSelectedRune() {
             this.selectedRune = null
         },
         setSelectedAbility(indexAbility: number, indexAbilitySet: number) {
-            if (this.selectedRune && 'abilitySets' in this.selectedRune) {
+            if (this.selectedRune && this.selectedRune.type === 'Champion') {
+                if (!this.selectedRune.abilitySets)
+                    throw new Error('abilitySets is null')
                 const abilities =
-                    this.selectedRune.abilitySets[indexAbilitySet].abilities
+                    this.selectedRune.abilitySets[indexAbilitySet]?.abilities
                 abilities.forEach((ability, i) => {
                     if (!this.selectedRune)
                         throw new Error('selectedRune is null')
