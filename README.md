@@ -13,7 +13,7 @@ If you want to contribute, simply run these:
 
 ## ⚖️ Legal
 
-The code base undergoes the [MIT License](https://github.com/sebakocz/poxfield/blob/main/LICENCE.md)
+The code base undergoes the [MIT License](https://github.com/sebakocz/poxfield/blob/master/LICENCE.md)
 
 All data and images related to Poxnora on this website are property of Desert Owl INC.
 
