@@ -102,7 +102,7 @@
         </div>
 
         <button
-            class="w-[99%] rounded bg-blue-600 py-2 font-semibold text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            class="sticky bottom-0 w-[99%] rounded bg-blue-600 py-2 font-semibold text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
             @click="resetFilters"
         >
             Reset Filters
