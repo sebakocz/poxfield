@@ -76,6 +76,12 @@ export const useRunes = defineStore('runesStore', () => {
             (filter) => filter.key === 'runeSet'
         )[0].possibleValues = [...uniqueRuneSets].sort()
 
+        const uniqueArtists = new Set(runes.map((rune) => rune.artist))
+
+        categoryFilters.filter(
+            (filter) => filter.key === 'artist'
+        )[0].possibleValues = [...uniqueArtists].sort()
+
         resetFilters()
     }
 

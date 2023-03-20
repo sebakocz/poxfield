@@ -8,6 +8,7 @@ export type CatagoryFilter = {
         | 'rarity'
         | 'size'
         | 'type'
+        | 'artist'
     possibleValues: string[]
     query: string
 }
@@ -28,8 +29,14 @@ export type EffectFilter = {
 
 export const categoryFilters: CatagoryFilter[] = [
     {
-        label: 'Class',
-        key: 'classes',
+        label: 'Type',
+        key: 'type',
+        possibleValues: ['Champion', 'Equipment', 'Relic', 'Spell'],
+        query: '',
+    },
+    {
+        label: 'Faction',
+        key: 'factions',
         possibleValues: [],
         query: '',
     },
@@ -40,21 +47,9 @@ export const categoryFilters: CatagoryFilter[] = [
         query: '',
     },
     {
-        label: 'Faction',
-        key: 'factions',
+        label: 'Class',
+        key: 'classes',
         possibleValues: [],
-        query: '',
-    },
-    {
-        label: 'Set',
-        key: 'runeSet',
-        possibleValues: [],
-        query: '',
-    },
-    {
-        label: 'Rarity',
-        key: 'rarity',
-        possibleValues: ['COMMON', 'UNCOMMON', 'RARE', 'LEGENDARY', 'EXOTIC'],
         query: '',
     },
     {
@@ -64,9 +59,21 @@ export const categoryFilters: CatagoryFilter[] = [
         query: '',
     },
     {
-        label: 'Type',
-        key: 'type',
-        possibleValues: ['Champion', 'Equipment', 'Relic', 'Spell'],
+        label: 'Rarity',
+        key: 'rarity',
+        possibleValues: ['COMMON', 'UNCOMMON', 'RARE', 'LEGENDARY', 'EXOTIC'],
+        query: '',
+    },
+    {
+        label: 'Set',
+        key: 'runeSet',
+        possibleValues: [],
+        query: '',
+    },
+    {
+        label: 'Artist',
+        key: 'artist',
+        possibleValues: [],
         query: '',
     },
 ]
