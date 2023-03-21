@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Rune } from '@src/api/poxApiDto'
+import { Rune } from '@src/libs/api/poxApiDto'
 import { computed, ref } from 'vue'
 import {
     CatagoryFilter,

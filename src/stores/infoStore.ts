@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Rune } from '@src/api/poxApiDto'
+import { Rune } from '@src/libs/api/poxApiDto'
 
 export const useInfo = defineStore({
     id: 'infoStore',
@@ -14,18 +14,6 @@ export const useInfo = defineStore({
             this.isDeck = isDeck
             if (isDeck) {
                 this.selectedRune = rune
-                return
-            }
-
-            if (rune.type === 'Champion') {
-                const champ = JSON.parse(JSON.stringify(rune)) as Rune
-                champ.abilitySets?.forEach((abilitySet) => {
-                    abilitySet.abilities.forEach((ability) => {
-                        ability.selected = ability.default
-                    })
-                })
-
-                this.selectedRune = champ
                 return
             }
 

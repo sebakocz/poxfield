@@ -151,7 +151,7 @@ import { computed, onMounted, onUnmounted } from 'vue'
 import RuneDisplayLarge from '@src/components/RuneDisplayLarge.vue'
 import RuneDisplayMedium from '@src/components/RuneDisplayMedium.vue'
 import { useMobileCheck } from '@src/composables/mobileCheck'
-import { Rune } from '@src/api/poxApiDto'
+import { Rune } from '@src/libs/api/poxApiDto'
 import AbilityBlock from '@src/components/AbilityBlock.vue'
 
 const infoStore = useInfo()

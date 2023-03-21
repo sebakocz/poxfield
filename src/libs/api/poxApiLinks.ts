@@ -1,4 +1,4 @@
-import { Rune } from '@src/api/poxApiDto'
+import { Rune } from '@src/libs/api/poxApiDto'
 
 export enum ApiEndpoints {
     GET_ALL_RUNES = 'https://raw.githubusercontent.com/sebakocz/poxfield/json-data/runes.json',

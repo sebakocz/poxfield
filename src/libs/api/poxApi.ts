@@ -1,10 +1,10 @@
 import { ref } from 'vue'
 import { useRunes } from '@src/stores/runesStore'
-import { Rune } from './poxApiDto'
+import { AbilitySet, Rune } from './poxApiDto'
 import localforage from 'localforage'
-import { ApiEndpoints } from '@src/api/poxApiLinks'
+import { ApiEndpoints } from '@src/libs/api/poxApiLinks'
 
-const CURRENT_VERSION = 5
+const CURRENT_VERSION = 6
 const DATA_EXPIRATION_TIME = 24 * 60 * 60 * 1000 * 7 // 7 days
 
 const DB_OPTIONS: LocalForageOptions = {
@@ -45,16 +45,32 @@ export const usePoxApi = () => {
         allRunes.push(...runesFromDB)
     }
 
+    // if (rune.type === 'Champion') {
+    //     const champ = JSON.parse(JSON.stringify(rune)) as Rune
+
+    //
+    //     this.selectedRune = champ
+    //     return
+    // }
+
     const saveRunesToDB = async (data: any) => {
         try {
             const keys = ['champs', 'equips', 'relics', 'spells']
             const types = ['Champion', 'Equipment', 'Relic', 'Spell']
             const newRunes: Rune[] = []
             for (const key of keys) {
-                const runes = data[key].map((rune: any) => ({
-                    ...rune,
-                    type: types[keys.indexOf(key)],
-                })) as Rune[]
+                const runes = data[key].map((rune: any) => {
+                    rune.abilitySets?.forEach((abilitySet: AbilitySet) => {
+                        abilitySet.abilities.forEach((ability) => {
+                            ability.selected = ability.default
+                        })
+                    })
+                    return {
+                        ...rune,
+                        type: types[keys.indexOf(key)],
+                    }
+                }) as Rune[]
+
                 const uniqueRunes = runes.filter(
                     (rune) => rune.rarity !== 'LIMITED'
                 )

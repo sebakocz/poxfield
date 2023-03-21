@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { usePoxApi } from '@src/api/poxApi'
+import { usePoxApi } from '@src/libs/api/poxApi'
 import { onMounted, ref } from 'vue'
 import { navRoutes } from '@src/constants/nav'
 import RunesView from '@src/views/RunesView.vue'
@@ -56,6 +56,7 @@ import { useRunes } from '@src/stores/runesStore'
 import { useMobileCheck } from '@src/composables/mobileCheck'
 import { useDeck } from '@src/stores/deckStore'
 import DeckView from '@src/views/DeckView.vue'
+import { decodeDeck } from '@src/libs/deckstring/deckEncoder'
 
 const poxApi = usePoxApi()
 const runesStore = useRunes()
@@ -64,6 +65,16 @@ const deckStore = useDeck()
 onMounted(async () => {
     await poxApi.initializeRunes()
     await runesStore.setupPossibleValues()
+
+    if (deckStore.deckLength) return
+    const deckString = new URLSearchParams(window.location.search).get('deck')
+    if (deckString) {
+        currentRouteIndex.value = 2
+        const deck = decodeDeck(deckString, runesStore.allRunes)
+        for (const rune of deck) {
+            deckStore.addRune(rune)
+        }
+    }
 })
 
 const currentRouteIndex = ref(0)

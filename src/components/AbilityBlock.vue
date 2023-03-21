@@ -57,8 +57,8 @@
 </template>
 
 <script setup lang="ts">
-import { Ability } from '@src/api/poxApiDto'
-import { getIconImgSmall } from '@src/api/poxApiLinks'
+import { Ability } from '@src/libs/api/poxApiDto'
+import { getIconImgSmall } from '@src/libs/api/poxApiLinks'
 
 defineProps<{
     title: string
