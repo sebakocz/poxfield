@@ -43,7 +43,9 @@ export const decodeDeck = (deckString: string, allRunes: Rune[]): Rune[] => {
 
     for (let i = 0; i < champStr.length; i += 3) {
         const id = decodeBase61(champStr.slice(i, i + 2))
-        const runeRef = allRunes.find((rune) => rune.id === id)
+        const runeRef = allRunes
+            .filter((rune) => rune.type === 'Champion')
+            .filter((rune) => rune.id === id)[0]
         const rune = JSON.parse(
             JSON.stringify({ ...runeRef, type: 'Champion' })
         ) as Rune
