@@ -40,7 +40,11 @@ const copyToClipboard = () => {
     const deckString = encodeDeck(
         JSON.parse(JSON.stringify(deckStore.deckRunes)) as DeckRune[]
     )
-    const fullLink = import.meta.env.BASE_URL + '?deck=' + deckString
+    const fullLink =
+        window.location.origin +
+        import.meta.env.BASE_URL +
+        '?deck=' +
+        deckString
     navigator.clipboard.writeText(fullLink)
 }
 </script>
