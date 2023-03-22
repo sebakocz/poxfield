@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Rune } from '@src/libs/api/poxApiDto'
+import { Rune } from '@src/libs/api/poxDto'
 import { computed, ref } from 'vue'
 import {
     CatagoryFilter,
@@ -9,6 +9,7 @@ import {
     NumberFilter,
     numberFilters,
 } from '@src/constants/filters'
+import { deepCopy } from '@src/libs/misc'
 
 export const useRunes = defineStore('runesStore', () => {
     const allRunes = ref<Rune[]>([])
@@ -218,9 +219,9 @@ export const useRunes = defineStore('runesStore', () => {
     }
 
     function resetFilters() {
-        categories.value = JSON.parse(JSON.stringify(categoryFilters))
-        numbers.value = JSON.parse(JSON.stringify(numberFilters))
-        effects.value = JSON.parse(JSON.stringify(effectFilters))
+        categories.value = deepCopy(categoryFilters)
+        numbers.value = deepCopy(numberFilters)
+        effects.value = deepCopy(effectFilters)
         searchQuery.value = ''
     }
 
@@ -241,7 +242,7 @@ export const useRunes = defineStore('runesStore', () => {
     return {
         allRunes,
         filteredList,
-        setupPossibleValues,
+        setupFilters: setupPossibleValues,
         categories,
         numbers,
         effects,

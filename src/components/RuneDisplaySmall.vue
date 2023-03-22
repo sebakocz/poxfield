@@ -3,9 +3,9 @@
 </template>
 
 <script setup lang="ts">
-import { Rune } from '@src/libs/api/poxApiDto'
+import { Rune } from '@src/libs/api/poxDto'
 import { computed } from 'vue'
-import { getRuneImgSmall } from '@src/libs/api/poxApiLinks'
+import { getRuneImgSmall } from '@src/libs/api/poxLinks'
 
 const props = defineProps<{
     rune: Rune

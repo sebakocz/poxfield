@@ -1,8 +1,8 @@
 import { ref } from 'vue'
 import { useRunes } from '@src/stores/runesStore'
-import { AbilitySet, Rune } from './poxApiDto'
+import { AbilitySet, Rune } from './poxDto'
 import localforage from 'localforage'
-import { ApiEndpoints } from '@src/libs/api/poxApiLinks'
+import { ApiEndpoints } from '@src/libs/api/poxLinks'
 
 const CURRENT_VERSION = 6
 const DATA_EXPIRATION_TIME = 24 * 60 * 60 * 1000 * 7 // 7 days
@@ -44,14 +44,6 @@ export const usePoxApi = () => {
         const runesFromDB = (await db.getItem('runes')) as Rune[]
         allRunes.push(...runesFromDB)
     }
-
-    // if (rune.type === 'Champion') {
-    //     const champ = JSON.parse(JSON.stringify(rune)) as Rune
-
-    //
-    //     this.selectedRune = champ
-    //     return
-    // }
 
     const saveRunesToDB = async (data: any) => {
         try {
@@ -95,7 +87,7 @@ export const usePoxApi = () => {
         } as DbTimestamp)
     }
 
-    const initializeRunes = async () => {
+    const loadRunes = async () => {
         // if runes are already loaded, don't fetch them again
         if (allRunes.length || isFetching.value) return
 
@@ -123,6 +115,6 @@ export const usePoxApi = () => {
     return {
         fetchAllRunes,
         isFetching,
-        initializeRunes,
+        loadRunes,
     }
 }

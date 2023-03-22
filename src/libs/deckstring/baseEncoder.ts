@@ -1,45 +1,41 @@
-const BASE61_ALPHABET =
+// Define the Base62 alphabet
+const BASE62_ALPHABET =
     '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 
-export const encodeBase61 = (number: number): string => {
+/**
+ * Encodes a positive integer number to a Base62 string with exactly two characters.
+ * Note: The input number should be in the range of 0 to 3721 (inclusive) to ensure
+ * the output string is exactly two characters long.
+ *
+ * @param number The number to be encoded.
+ * @returns The Base62 encoded string.
+ */
+export const encodeBase62 = (number: number): string => {
     if (number < 0) throw new Error('Number must be positive')
-    if (number === 0) return '00'
+    if (number > 3721)
+        throw new Error('Number must be less than or equal to 3721')
 
-    if (number <= 3721) {
-        // If number is less than or equal to 3721, only encode using two characters
-        const remainder = number % 61
-        const firstChar = BASE61_ALPHABET.charAt(Math.floor(number / 61))
-        const secondChar = BASE61_ALPHABET.charAt(remainder)
-        return firstChar + secondChar
-    }
-
-    let result = ''
-    while (number > 0) {
-        const remainder = number % 61
-        result = BASE61_ALPHABET.charAt(remainder) + result
-        number = Math.floor(number / 61)
-    }
-
-    // Add padding zeros
-    const paddingLength = Math.ceil(result.length / 3) * 3 - result.length
-    const paddingZeros = '0'.repeat(paddingLength)
-    result = paddingZeros + result
-
-    return result
+    const remainder = number % 62
+    const firstChar = BASE62_ALPHABET.charAt(Math.floor(number / 62))
+    const secondChar = BASE62_ALPHABET.charAt(remainder)
+    return firstChar + secondChar
 }
 
-export const decodeBase61 = (encodedString: string): number => {
+/**
+ * Decodes a Base62 encoded string back to a positive integer number.
+ *
+ * @param encodedString The Base62 encoded string to be decoded.
+ * @returns The decoded number.
+ */
+export const decodeBase62 = (encodedString: string): number => {
     if (!encodedString) throw new Error('Encoded string must not be empty')
-
-    // Remove padding zeros
-    encodedString = encodedString.replace(/^0+/, '')
 
     let number = 0
     for (let i = 0; i < encodedString.length; i++) {
-        const index = BASE61_ALPHABET.indexOf(encodedString.charAt(i))
+        const index = BASE62_ALPHABET.indexOf(encodedString.charAt(i))
         if (index === -1)
             throw new Error('Invalid character found in encoded string')
-        number = number * 61 + index
+        number = number * 62 + index
     }
 
     return number

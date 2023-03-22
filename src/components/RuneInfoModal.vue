@@ -151,7 +151,7 @@ import { computed, onMounted, onUnmounted } from 'vue'
 import RuneDisplayLarge from '@src/components/RuneDisplayLarge.vue'
 import RuneDisplayMedium from '@src/components/RuneDisplayMedium.vue'
 import { useMobileCheck } from '@src/composables/mobileCheck'
-import { Rune } from '@src/libs/api/poxApiDto'
+import { Rune } from '@src/libs/api/poxDto'
 import AbilityBlock from '@src/components/AbilityBlock.vue'
 
 const infoStore = useInfo()
@@ -191,15 +191,3 @@ const handleRemove = () => {
     infoStore.clearSelectedRune()
 }
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.3s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
-</style>

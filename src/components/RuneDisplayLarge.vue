@@ -81,14 +81,14 @@
 </template>
 
 <script setup lang="ts">
-import { Rune } from '@src/libs/api/poxApiDto'
+import { Rune } from '@src/libs/api/poxDto'
 import {
     getBackgroundFrameImgLarge,
     getStatsFrameImg,
     getRarityFrameImgLarge,
     getRuneImgLarge,
     getFactionImgs,
-} from '@src/libs/api/poxApiLinks'
+} from '@src/libs/api/poxLinks'
 import { computed } from 'vue'
 
 const props = defineProps<{
@@ -101,15 +101,3 @@ const backgroundFrameImg = computed(() => getBackgroundFrameImgLarge())
 const iconsFrameImg = computed(() => getStatsFrameImg())
 const { rightFactionImg, leftFactionImg } = getFactionImgs(props.rune.factions)
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.3s ease;
-}
-.fade-enter,
-.fade-leave-to {
-    opacity: 0;
-    scale: 0.9;
-}
-</style>

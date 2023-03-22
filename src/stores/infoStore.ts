@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { Rune } from '@src/libs/api/poxApiDto'
+import { Rune } from '@src/libs/api/poxDto'
+import { deepCopy } from '@src/libs/misc'
 
 export const useInfo = defineStore({
     id: 'infoStore',
@@ -17,7 +18,7 @@ export const useInfo = defineStore({
                 return
             }
 
-            this.selectedRune = JSON.parse(JSON.stringify(rune)) as Rune
+            this.selectedRune = deepCopy(rune) as Rune
         },
         clearSelectedRune() {
             this.selectedRune = null

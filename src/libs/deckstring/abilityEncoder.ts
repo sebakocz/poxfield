@@ -1,54 +1,51 @@
-// Define the types for the abilities and the encoded string
 import { DeckRune } from '@src/stores/deckStore'
-import { Rune } from '@src/libs/api/poxApiDto'
+import { Rune } from '@src/libs/api/poxDto'
 
-type AbilityIndex = 0 | 1 | 2 // only 3 abilities per level
-type EncodedAbilities = keyof typeof ABILITY_MAPPING
-
-// Define the type for the decoded abilities
+type AbilityIndex = 0 | 1 | 2 // Only 3 abilities per level
 type DecodedAbilities = [AbilityIndex, AbilityIndex]
 
-// Define a mapping between each combination of abilities and a single character
-const ABILITY_MAPPING = {
+// Mapping of ability combinations to a single character
+const ABILITY_MAPPING: Record<string, string> = {
     '00': 'A',
     '01': 'B',
     '02': 'C',
     '11': 'D',
     '12': 'E',
     '22': 'F',
-}
+    '10': 'G',
+    '20': 'H',
+    '21': 'I',
+} as const
 
-// Encode a combination of abilities into a single character
-export const encodeAbilities = (abilities: [AbilityIndex, AbilityIndex]) => {
-    const key = abilities.sort().join('') as EncodedAbilities
+// Use a type assertion to bypass the circular reference issue
+type EncodedAbilitiesKeys = keyof typeof ABILITY_MAPPING
+
+export const encodeAbilities = (abilities: DecodedAbilities): string => {
+    const key = abilities.sort().join('') as EncodedAbilitiesKeys
     return ABILITY_MAPPING[key]
 }
 
-export const getSelectedAbilities = (
-    rune: DeckRune
-): [AbilityIndex, AbilityIndex] => {
+export const getSelectedAbilities = (rune: DeckRune): DecodedAbilities => {
     if (rune.type !== 'Champion') {
         console.dir(rune)
         throw new Error('Encoder: Rune is not a champion')
     }
-    const getAbility = (index: 0 | 1) =>
-        rune.abilitySets &&
-        rune.abilitySets[index] &&
-        (rune.abilitySets[index].abilities.findIndex(
+
+    const getAbility = (index: 0 | 1): AbilityIndex | -1 => {
+        if (!rune.abilitySets || !rune.abilitySets[index]) {
+            return -1
+        }
+        return rune.abilitySets[index].abilities.findIndex(
             (ability) => ability.selected
-        ) as AbilityIndex | -1)
+        ) as AbilityIndex | -1
+    }
 
     const ability1 = getAbility(0)
     const ability2 = getAbility(1)
 
-    if (
-        ability1 === undefined ||
-        ability2 === undefined ||
-        ability1 === -1 ||
-        ability2 === -1
-    ) {
+    if (ability1 === -1 || ability2 === -1) {
         console.dir(rune)
-        throw new Error('Encoder: Rune has no selected abilities:')
+        throw new Error('Encoder: Rune has no selected abilities')
     }
 
     return [ability1, ability2]
@@ -57,47 +54,46 @@ export const getSelectedAbilities = (
 export const setSelectedAbilities = (
     rune: Rune,
     abilities: DecodedAbilities
-) => {
+): void => {
     if (rune.type !== 'Champion') {
         console.dir(rune)
         throw new Error('Encoder: Rune is not a champion')
     }
     const [ability1, ability2] = abilities
-    if (rune.abilitySets) {
-        // for each ability in set
-        rune.abilitySets[0].abilities.forEach((ability, i) => {
-            // remove nora cost of previous ability
-            // add nora cost of selected ability
-            const selected = i === ability1
-            if (ability.selected) rune.noraCost -= ability.noraCost
-            ability.selected = selected
-            if (ability.selected) rune.noraCost += ability.noraCost
-        })
-        rune.abilitySets[1].abilities.forEach((ability, i) => {
-            // remove nora cost of previous ability
-            // add nora cost of selected ability
-            const selected = i === ability2
-            if (ability.selected) rune.noraCost -= ability.noraCost
-            ability.selected = selected
-            if (ability.selected) rune.noraCost += ability.noraCost
-        })
+    if (!rune.abilitySets) {
+        return
     }
+
+    // Update abilities and noraCost for each ability set
+    rune.abilitySets.forEach((abilitySet, setIndex) => {
+        const selectedAbilityIndex = setIndex === 0 ? ability1 : ability2
+        abilitySet.abilities.forEach((ability, abilityIndex) => {
+            const isSelected = abilityIndex === selectedAbilityIndex
+            if (ability.selected) {
+                rune.noraCost -= ability.noraCost
+            }
+            ability.selected = isSelected
+            if (ability.selected) {
+                rune.noraCost += ability.noraCost
+            }
+        })
+    })
 }
 
-// Decode a single character back into the combination of abilities
 export const decodeAbilities = (char: string): DecodedAbilities | null => {
     if (char.length !== 1) {
         return null
     }
-    for (const key in ABILITY_MAPPING) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        if (ABILITY_MAPPING[key] === char) {
-            const [ability1, ability2] = key
-                .split('')
-                .map((ability) => parseInt(ability) as AbilityIndex)
-            return [ability1, ability2]
-        }
+    const abilityKey = Object.entries(ABILITY_MAPPING).find(
+        ([_, value]) => value === char
+    )?.[0]
+
+    if (abilityKey) {
+        const [ability1, ability2] = abilityKey
+            .split('')
+            .map((ability) => parseInt(ability) as AbilityIndex)
+        return [ability1, ability2]
     }
+
     return null
 }

@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
-import { Rune } from '@src/libs/api/poxApiDto'
+import { Rune } from '@src/libs/api/poxDto'
 import { computed, ref } from 'vue'
+import { deepCopy } from '@src/libs/misc'
 
 export type DeckRune = Rune & { deckId: string }
 
-function generateRandomId() {
+const generateRandomId = () => {
     const chars =
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     let id = ''
@@ -14,44 +15,40 @@ function generateRandomId() {
     return id
 }
 
+const typeOrder = Object.fromEntries(
+    Object.entries({
+        Champion: 0,
+        Spell: 1,
+        Equipment: 2,
+        Relic: 3,
+    }).sort((a, b) => a[1] - b[1])
+)
+
 export const useDeck = defineStore('deckStore', () => {
     const deckRunes = ref<DeckRune[]>([])
 
-    const sortedRunes = computed(() => {
-        // type > name > noraCost
-        // Champion > Spell > Equipment > Relic
-
-        const sorted = [...deckRunes.value]
-        sorted.sort((a, b) => {
-            if (a.type === b.type) {
-                if (a.name === b.name) {
-                    return a.noraCost - b.noraCost
-                }
-                return a.name.localeCompare(b.name)
-            }
-            switch (a.type) {
-                case 'Champion':
-                    return -1
-                case 'Spell':
-                    return b.type === 'Champion' ? 1 : -1
-                case 'Equipment':
-                    return b.type === 'Relic' ? -1 : 1
-                case 'Relic':
-                    return 1
-            }
-        })
-        return sorted
-    })
+    // type > name > cost
+    // Champion > Spell > Equipment > Relic
+    const sortedRunes = computed(() =>
+        [...deckRunes.value].sort(
+            (
+                { type: aType, name: aName, noraCost: aCost },
+                { type: bType, name: bName, noraCost: bCost }
+            ) =>
+                typeOrder[aType] - typeOrder[bType] ||
+                aName.localeCompare(bName) ||
+                aCost - bCost
+        )
+    )
 
     const deckLength = computed(() => deckRunes.value.length)
     const addRune = (rune: Rune) => {
         if (deckLength.value >= 30) return
         if (countRune(rune.hash) >= rune.deckLimit) return
 
-        const newRune = JSON.parse(JSON.stringify(rune)) as DeckRune
+        const newRune = deepCopy(rune) as DeckRune
         newRune.deckId = generateRandomId()
         deckRunes.value.push(newRune)
-        deckRunes.value.sort((a, b) => a.name.localeCompare(b.name))
     }
     const removeRune = (rune: DeckRune) => {
         deckRunes.value = deckRunes.value.filter(

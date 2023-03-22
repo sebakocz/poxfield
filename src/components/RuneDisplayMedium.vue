@@ -76,14 +76,14 @@
 </template>
 
 <script setup lang="ts">
-import { Rune } from '@src/libs/api/poxApiDto'
+import { Rune } from '@src/libs/api/poxDto'
 import {
     getBackgroundFrameImgSmall,
     getStatsFrameImg,
     getRarityFrameImgSmall,
     getRuneImgMedium,
     getFactionImgs,
-} from '@src/libs/api/poxApiLinks'
+} from '@src/libs/api/poxLinks'
 import { computed } from 'vue'
 
 const props = defineProps<{

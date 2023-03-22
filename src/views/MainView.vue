@@ -61,10 +61,11 @@ import { decodeDeck } from '@src/libs/deckstring/deckEncoder'
 const poxApi = usePoxApi()
 const runesStore = useRunes()
 const deckStore = useDeck()
+const { isMobile } = useMobileCheck()
+const currentRouteIndex = ref(0)
 
 onMounted(async () => {
-    await poxApi.initializeRunes()
-    await runesStore.setupPossibleValues()
+    await poxApi.loadRunes()
 
     if (deckStore.deckLength) return
     const deckString = new URLSearchParams(window.location.search).get('deck')
@@ -75,21 +76,9 @@ onMounted(async () => {
             deckStore.addRune(rune)
         }
     }
+
+    await runesStore.setupFilters()
 })
-
-const currentRouteIndex = ref(0)
-
-const { isMobile } = useMobileCheck()
 </script>
 
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.2s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
-</style>
+<style scoped></style>

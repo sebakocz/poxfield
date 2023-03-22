@@ -49,7 +49,7 @@ const {
     onScroll,
     containerStyle,
     visibleList,
-} = useVirtualScroll(filteredList as any)
+} = useVirtualScroll(filteredList)
 </script>
 
 <style scoped>

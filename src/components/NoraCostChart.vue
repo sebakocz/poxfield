@@ -9,6 +9,7 @@ import { Bar } from 'vue-chartjs'
 import { onMounted, ref, watchEffect } from 'vue'
 import { DeckRune, useDeck } from '@src/stores/deckStore'
 import { Chart, BarElement, CategoryScale, LinearScale, Title } from 'chart.js'
+import { deepCopy } from '@src/libs/misc'
 
 const deckStore = useDeck()
 
@@ -28,15 +29,6 @@ const chartData = ref({
 })
 
 const chartOptions = {
-    animation: {
-        duration: 1000,
-        x: {
-            from: 400,
-        },
-        y: {
-            from: 1000,
-        },
-    },
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -68,9 +60,9 @@ onMounted(() => {
     watchEffect(() => {
         const labels = Array.from({ length: 13 }, (_, i) => i * 10)
         const data = new Array(13).fill(0)
-        const sortedRunes = JSON.parse(
-            JSON.stringify(deckStore.deckRunes)
-        ).sort((a: DeckRune, b: DeckRune) => a.noraCost - b.noraCost)
+        const sortedRunes = deepCopy(deckStore.deckRunes).sort(
+            (a: DeckRune, b: DeckRune) => a.noraCost - b.noraCost
+        )
 
         for (const rune of sortedRunes) {
             const index = Math.floor(rune.noraCost / 10)
