@@ -1,8 +1,7 @@
 import { DeckRune } from '@src/stores/deckStore'
-import { Rune } from '@src/libs/api/poxDto'
 
-type AbilityIndex = 0 | 1 | 2 // Only 3 abilities per level
-type DecodedAbilities = [AbilityIndex, AbilityIndex]
+export type AbilityIndex = 0 | 1 | 2 // Only 3 abilities per level
+export type DecodedAbilities = [AbilityIndex, AbilityIndex]
 
 // Mapping of ability combinations to a single character
 const ABILITY_MAPPING: Record<string, string> = {
@@ -49,35 +48,6 @@ export const getSelectedAbilities = (rune: DeckRune): DecodedAbilities => {
     }
 
     return [ability1, ability2]
-}
-
-export const setSelectedAbilities = (
-    rune: Rune,
-    abilities: DecodedAbilities
-): void => {
-    if (rune.type !== 'Champion') {
-        console.dir(rune)
-        throw new Error('Encoder: Rune is not a champion')
-    }
-    const [ability1, ability2] = abilities
-    if (!rune.abilitySets) {
-        return
-    }
-
-    // Update abilities and noraCost for each ability set
-    rune.abilitySets.forEach((abilitySet, setIndex) => {
-        const selectedAbilityIndex = setIndex === 0 ? ability1 : ability2
-        abilitySet.abilities.forEach((ability, abilityIndex) => {
-            const isSelected = abilityIndex === selectedAbilityIndex
-            if (ability.selected) {
-                rune.noraCost -= ability.noraCost
-            }
-            ability.selected = isSelected
-            if (ability.selected) {
-                rune.noraCost += ability.noraCost
-            }
-        })
-    })
 }
 
 export const decodeAbilities = (char: string): DecodedAbilities | null => {

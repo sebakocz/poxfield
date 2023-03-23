@@ -23,26 +23,5 @@ export const useInfo = defineStore({
         clearSelectedRune() {
             this.selectedRune = null
         },
-        setSelectedAbility(indexAbility: number, indexAbilitySet: number) {
-            if (this.selectedRune && this.selectedRune.type === 'Champion') {
-                if (!this.selectedRune.abilitySets)
-                    throw new Error('abilitySets is null')
-                const abilities =
-                    this.selectedRune.abilitySets[indexAbilitySet]?.abilities
-                abilities.forEach((ability, i) => {
-                    if (!this.selectedRune)
-                        throw new Error('selectedRune is null')
-
-                    // remove nora cost of previous ability
-                    // add nora cost of selected ability
-                    const selected = i === indexAbility
-                    if (ability.selected)
-                        this.selectedRune.noraCost -= ability.noraCost
-                    ability.selected = selected
-                    if (ability.selected)
-                        this.selectedRune.noraCost += ability.noraCost
-                })
-            }
-        },
     },
 })

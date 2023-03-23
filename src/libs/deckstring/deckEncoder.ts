@@ -1,13 +1,14 @@
 import { DeckRune } from '@src/stores/deckStore'
 import {
     decodeAbilities,
+    DecodedAbilities,
     encodeAbilities,
     getSelectedAbilities,
-    setSelectedAbilities,
 } from '@src/libs/deckstring/abilityEncoder'
 import { decodeBase62, encodeBase62 } from '@src/libs/deckstring/baseEncoder'
 import { Rune } from '@src/libs/api/poxDto'
 import { deepCopy } from '@src/libs/misc'
+import { setAbility } from '@src/libs/rune'
 
 // a rune is two base62 encoded characters, example: 'A1' for id 65
 // champions also have an additional character for abilities [A-I]
@@ -65,18 +66,15 @@ export const decodeDeck = (deckString: string, allRunes: Rune[]): Rune[] => {
     for (let i = 0; i < champStr.length; i += 3) {
         const id = decodeBase62(champStr.slice(i, i + 2))
         const runeRef = getRuneByIdAndType(id, 'Champion')
-
         if (!runeRef) throw new Error('Decoder: Rune not found')
-
         const rune = deepCopy({ ...runeRef, type: 'Champion' }) as Rune
-        const abilities = decodeAbilities(champStr[i + 2])
 
-        if (!abilities)
-            throw new Error(
-                `Decoder: Abilities not found, Champion: ${rune.name}`
-            )
+        const [ability1, ability2] = decodeAbilities(
+            champStr[i + 2]
+        ) as DecodedAbilities
+        setAbility(rune, 0, ability1)
+        setAbility(rune, 1, ability2)
 
-        setSelectedAbilities(rune, abilities)
         deck.push(rune)
     }
 

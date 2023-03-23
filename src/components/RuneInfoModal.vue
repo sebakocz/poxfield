@@ -100,7 +100,7 @@
                                     selectedRune.abilitySets[0].abilities
                                 "
                                 @select-ability="
-                                    infoStore.setSelectedAbility($event, 0)
+                                    setAbility(selectedRune, 0, $event)
                                 "
                             />
                             <AbilityBlock
@@ -109,7 +109,7 @@
                                     selectedRune.abilitySets[1].abilities
                                 "
                                 @select-ability="
-                                    infoStore.setSelectedAbility($event, 1)
+                                    setAbility(selectedRune, 1, $event)
                                 "
                             />
                             <AbilityBlock
@@ -153,6 +153,7 @@ import RuneDisplayMedium from '@src/components/RuneDisplayMedium.vue'
 import { useMobileCheck } from '@src/composables/mobileCheck'
 import { Rune } from '@src/libs/api/poxDto'
 import AbilityBlock from '@src/components/AbilityBlock.vue'
+import { setAbility } from '@src/libs/rune'
 
 const infoStore = useInfo()
 const deckStore = useDeck()
