@@ -19,203 +19,165 @@ export const useRunes = defineStore('runesStore', () => {
     const numbers = ref<NumberFilter[]>([])
     const effects = ref<EffectFilter[]>([])
 
-    const setupPossibleValues = () => {
+    const setupFilters = () => {
         const runes = allRunes.value
         const championRunes = runes.filter((rune) => rune.type === 'Champion')
 
-        // unique ability names, starting + set abilities
-        const uniqueAbilities = [
-            ...new Set(
-                championRunes
-                    .map((rune) => rune.abilitySets)
-                    .flat()
-                    .map((set) => set?.abilities)
-                    .flat()
-                    .map((ability) => ability?.name)
-            ),
-            ...new Set(
-                championRunes
-                    .map((rune) => rune.startingAbilities)
-                    .flat()
-                    .map((ability) => ability?.name)
-            ),
-        ].sort()
+        // categories
+        const uniqueArtists = new Set<string>()
+        const uniqueClasses = new Set<string>()
+        const uniqueFactions = new Set<string>()
+        const uniqueRaces = new Set<string>()
+        const uniqueRuneSets = new Set<string>()
 
-        // remove double entries
-        const uniqueAbilitiesSet = [...new Set(uniqueAbilities)]
+        // abilities
+        const uniqueAbilities = new Set<string>()
 
-        effectFilters.filter(
-            (filter) => filter.key === 'effect'
-        )[0].possibleValues = uniqueAbilitiesSet as string[]
+        championRunes.forEach((rune) => {
+            rune.abilitySets?.forEach((set) => {
+                set?.abilities.forEach((ability) => {
+                    uniqueAbilities.add(ability?.name)
+                })
+            })
 
-        const uniqueClasses = new Set(
-            championRunes.map((rune) => rune.classes).flat()
-        )
-        categoryFilters.filter(
-            (filter) => filter.key === 'classes'
-        )[0].possibleValues = [...uniqueClasses].sort() as string[]
+            rune.startingAbilities?.forEach((ability) => {
+                uniqueAbilities.add(ability?.name)
+            })
 
-        const uniqueRaces = new Set(
-            championRunes.map((rune) => rune.races).flat()
-        )
+            rune.classes?.forEach((cls) => {
+                uniqueClasses.add(cls)
+            })
 
-        categoryFilters.filter(
-            (filter) => filter.key === 'races'
-        )[0].possibleValues = [...uniqueRaces].sort() as string[]
+            rune.races?.forEach((race) => {
+                uniqueRaces.add(race)
+            })
+        })
 
-        const uniqueFactions = new Set(
-            runes.map((rune) => rune.factions).flat()
-        )
+        runes.forEach((rune) => {
+            rune.factions.forEach((faction) => {
+                uniqueFactions.add(faction)
+            })
 
-        categoryFilters.filter(
-            (filter) => filter.key === 'factions'
-        )[0].possibleValues = [...uniqueFactions].sort()
+            uniqueRuneSets.add(rune.runeSet)
+            uniqueArtists.add(rune.artist)
+        })
 
-        const uniqueRuneSets = new Set(runes.map((rune) => rune.runeSet))
+        const setFilterValues = (
+            filters: (EffectFilter | CatagoryFilter)[],
+            key: string,
+            values: Set<string>
+        ) => {
+            filters.filter((filter) => filter.key === key)[0].possibleValues = [
+                ...values,
+            ].sort()
+        }
 
-        categoryFilters.filter(
-            (filter) => filter.key === 'runeSet'
-        )[0].possibleValues = [...uniqueRuneSets].sort()
+        setFilterValues(categoryFilters, 'artist', uniqueArtists)
+        setFilterValues(categoryFilters, 'classes', uniqueClasses)
+        setFilterValues(categoryFilters, 'factions', uniqueFactions)
+        setFilterValues(categoryFilters, 'races', uniqueRaces)
+        setFilterValues(categoryFilters, 'runeSet', uniqueRuneSets)
 
-        const uniqueArtists = new Set(runes.map((rune) => rune.artist))
-
-        categoryFilters.filter(
-            (filter) => filter.key === 'artist'
-        )[0].possibleValues = [...uniqueArtists].sort()
+        setFilterValues(effectFilters, 'effect', uniqueAbilities)
 
         resetFilters()
+    }
+    const filterRune = (rune: Rune, searchTerm: string) => {
+        if (!applyFilters(rune)) {
+            return false
+        }
+
+        if (
+            rune.name.toLowerCase().includes(searchTerm) ||
+            rune.description.toLowerCase().includes(searchTerm)
+        ) {
+            return true
+        }
+
+        if (
+            'races' in rune &&
+            rune.races?.some((r) => r.toLowerCase().includes(searchTerm))
+        ) {
+            return true
+        }
+
+        const abilities = [
+            ...(rune.abilitySets?.flatMap((set) => set.abilities) || []),
+            ...(rune.startingAbilities || []),
+        ]
+
+        return abilities.some(
+            (a) =>
+                a.name.toLowerCase().includes(searchTerm) ||
+                a.shortDescription.toLowerCase().includes(searchTerm)
+        )
     }
 
     const filteredList = computed(() => {
         const searchTerm = searchQuery.value.toLowerCase()
-
-        const filtered: Rune[] = []
-
-        allRunes.value.forEach((rune) => {
-            if (!applyFilters(rune)) {
-                return
-            }
-
-            if (rune.name.toLowerCase().includes(searchTerm)) {
-                filtered.push(rune)
-                return
-            }
-            if (rune.description.toLowerCase().includes(searchTerm)) {
-                filtered.push(rune)
-                return
-            }
-            if (
-                'races' in rune &&
-                rune.races?.some((r) => r.toLowerCase().includes(searchTerm))
-            ) {
-                filtered.push(rune)
-                return
-            }
-            if ('abilitySets' in rune) {
-                const abilities = rune.abilitySets
-                    ?.map((set) => set.abilities)
-                    .flat()
-                if (
-                    abilities?.some((a) =>
-                        a.name.toLowerCase().includes(searchTerm)
-                    )
-                ) {
-                    filtered.push(rune)
-                    return
-                }
-                if (
-                    abilities?.some((a) =>
-                        a.shortDescription.toLowerCase().includes(searchTerm)
-                    )
-                ) {
-                    filtered.push(rune)
-                    return
-                }
-            }
-
-            if ('startingAbilities' in rune) {
-                if (
-                    rune.startingAbilities?.some((a) =>
-                        a.name.toLowerCase().includes(searchTerm)
-                    )
-                ) {
-                    filtered.push(rune)
-                    return
-                }
-                if (
-                    rune.startingAbilities?.some((a) =>
-                        a.shortDescription.toLowerCase().includes(searchTerm)
-                    )
-                ) {
-                    filtered.push(rune)
-                    return
-                }
-            }
-        })
-
-        return filtered
+        return allRunes.value.filter((rune) => filterRune(rune, searchTerm))
     })
 
-    function applyFilters(rune: Rune) {
-        // Category filters
-        for (const filter of categories.value) {
-            if (filter.query) {
-                // extra for type
-                if (filter.key === 'type') {
-                    if (rune.type !== filter.query) {
-                        return false
-                    }
-                }
-
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                if (!rune[filter.key]?.includes(filter.query)) {
-                    return false
-                }
+    function applyCategoryFilters(rune: Rune, filters: CatagoryFilter[]) {
+        return filters.every((filter) => {
+            if (!filter.query) {
+                return true
             }
-        }
 
-        // Number filters
-        for (const filter of numbers.value) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
+            if (filter.key === 'type') {
+                return rune.type === filter.query
+            }
+
+            return rune[filter.key]?.includes(filter.query)
+        })
+    }
+
+    function applyNumberFilters(rune: Rune, filters: NumberFilter[]) {
+        return filters.every((filter) => {
+            if (!filter.query) return true
+
             const value = rune[filter.key]
+            if (value === undefined) return false
 
             switch (filter.condition) {
                 case 'moreThan':
-                    if (value <= filter.query) return false
-                    break
+                    return value > filter.query
                 case 'lessThan':
-                    if (value >= filter.query) return false
-                    break
+                    return value < filter.query
                 case 'moreOrEqual':
-                    if (value < filter.query) return false
-                    break
+                    return value >= filter.query
                 case 'lessOrEqual':
-                    if (value > filter.query) return false
-                    break
+                    return value <= filter.query
                 case 'equal':
-                    if (value !== filter.query) return false
-                    break
+                    return value === filter.query
+                default:
+                    return true
             }
-        }
+        })
+    }
 
-        // Effect filters
-        for (const filter of effects.value) {
-            if (filter.query && rune.type === 'Champion') {
-                // check ability sets and starting abilities
-                const abilities = rune.abilitySets
-                    ?.map((set) => set.abilities)
-                    .flat()
-                    .concat(rune.startingAbilities ?? [])
+    function applyEffectFilters(rune: Rune, filters: EffectFilter[]) {
+        if (rune.type !== 'Champion') return false
 
-                if (!abilities?.some((a) => a.name === filter.query)) {
-                    return false
-                }
+        const abilities = rune.abilitySets
+            ?.flatMap((set) => set.abilities)
+            .concat(rune.startingAbilities ?? [])
+
+        return filters.every((filter) => {
+            if (!filter.query) {
+                return true
             }
-        }
 
-        return true
+            return abilities?.some((a) => a.name === filter.query)
+        })
+    }
+
+    function applyFilters(rune: Rune) {
+        return (
+            applyCategoryFilters(rune, categories.value) &&
+            applyNumberFilters(rune, numbers.value) &&
+            applyEffectFilters(rune, effects.value)
+        )
     }
 
     function resetFilters() {
@@ -225,24 +187,26 @@ export const useRunes = defineStore('runesStore', () => {
         searchQuery.value = ''
     }
 
-    const activeFilterKeys = computed(() => {
-        const categoriesActive = categories.value.filter(
-            (filter) => filter.query
-        )
-        const numbersActive = numbers.value.filter((filter) => filter.query)
-        const effectsActive = effects.value.filter((filter) => filter.query)
+    const getActiveFilterKeys = (
+        filters: (EffectFilter | CatagoryFilter | NumberFilter)[]
+    ) => {
+        return filters
+            .filter((filter) => filter.query)
+            .map((filter) => filter.key)
+    }
 
+    const activeFilterKeys = computed(() => {
         return [
-            ...categoriesActive.map((filter) => filter.key),
-            ...numbersActive.map((filter) => filter.key),
-            ...effectsActive.map((filter) => filter.key),
+            ...getActiveFilterKeys(categories.value),
+            ...getActiveFilterKeys(numbers.value),
+            ...getActiveFilterKeys(effects.value),
         ]
     })
 
     return {
         allRunes,
         filteredList,
-        setupFilters: setupPossibleValues,
+        setupFilters,
         categories,
         numbers,
         effects,
