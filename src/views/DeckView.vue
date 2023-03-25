@@ -36,7 +36,7 @@
             <div
                 class="flex flex-wrap items-center justify-center gap-2 bg-gray-300 p-2"
                 :class="{
-                    'md:w-[70%]': selectedOptions.View === 'Icons',
+                    'md:w-[75%]': selectedOptions.View === 'Icons',
                     'w-[99%]':
                         selectedOptions.View === 'Frames' ||
                         selectedOptions.View === 'Stacks',
@@ -124,16 +124,18 @@ const displayedRunes = computed(() => {
 
     runes = applyGrouping(runes, selectedOptions.Group)
 
-    runes.forEach((group) => {
-        group.runes.sort((a, b) => {
-            if (selectedOptions.Sort === 'Name') {
-                return a.name.localeCompare(b.name)
-            } else if (selectedOptions.Sort === 'Cost') {
-                return a.noraCost - b.noraCost
-            }
-            return 0
+    if (selectedOptions.Sort !== 'Type') {
+        runes.forEach((group) => {
+            group.runes.sort((a, b) => {
+                if (selectedOptions.Sort === 'Name') {
+                    return a.name.localeCompare(b.name)
+                } else if (selectedOptions.Sort === 'Cost') {
+                    return a.noraCost - b.noraCost
+                }
+                return 0
+            })
         })
-    })
+    }
 
     return runes
 })
@@ -188,7 +190,7 @@ function applyGrouping(runes: DeckRune[], groupBy: string) {
 const displayOptions = {
     View: ['Icons', 'Frames', 'Stacks'],
     Group: ['None', 'Type', 'Factions', 'Races'],
-    Sort: ['Name', 'Cost'],
+    Sort: ['Type', 'Name', 'Cost'],
 }
 
 const selectedOptions = reactive({
