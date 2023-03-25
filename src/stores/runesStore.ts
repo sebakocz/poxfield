@@ -157,6 +157,7 @@ export const useRunes = defineStore('runesStore', () => {
     }
 
     function applyEffectFilters(rune: Rune, filters: EffectFilter[]) {
+        if (filters.every((filter) => !filter.query)) return true
         if (rune.type !== 'Champion') return false
 
         const abilities = rune.abilitySets
