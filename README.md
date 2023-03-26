@@ -17,6 +17,10 @@ The code base undergoes the [MIT License](https://github.com/sebakocz/poxfield/b
 
 All data and images related to Poxnora on this website are property of Desert Owl INC.
 
+## :eyes: Overview
+
+![ezgif com-crop](https://user-images.githubusercontent.com/44639352/227735609-4fad0cab-7aad-48c2-a1dc-dd1708d01b09.gif)
+
 ## :crossed_swords::saxophone: Competition & Inspiration
 - [Poxala](https://poxala-fa4ce.web.app/runes) - deck builder made by a community member
 - [PoxRaze](https://blacr7.github.io/PoxRaze/) - extended search made by a community member
