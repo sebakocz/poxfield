@@ -11,7 +11,7 @@ import { deepCopy } from '@src/libs/misc'
 import { setAbility } from '@src/libs/rune'
 
 // a rune is two base62 encoded characters, example: 'A1' for id 65
-// champions also have an additional character for abilities [A-I]
+// champions also have an additional character for abilities (also base62 encoded '11' -> 'A')
 // [champs]-[spells]-[equips]-[relics]+-9
 // example: 4QEMDEMDEEGAEGA8pB8pBN3BN3BDZD84F56A7iA7iAOEEOEEOaCOaCB4D-091K1K3I3I-2I2I15-2S6Z5M
 
