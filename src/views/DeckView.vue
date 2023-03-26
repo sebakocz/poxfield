@@ -34,7 +34,7 @@
             </div>
             <!-- Deck Display -->
             <div
-                class="flex flex-wrap items-center justify-center gap-2 bg-gray-300 p-2"
+                class="bg-gray-300 p-2"
                 :class="{
                     'md:w-[75%]': selectedOptions.View === 'Icons',
                     'w-[99%]':
@@ -52,46 +52,27 @@
                     >
                         {{ group.title }} ({{ group.runes.length }})
                     </div>
-                    <template v-if="selectedOptions.View === 'Icons'">
-                        <TransitionGroup name="fade">
-                            <RuneDisplaySmall
-                                v-for="rune in group.runes"
-                                :key="rune.deckId"
-                                :rune="rune"
-                                class="cursor-pointer duration-200 hover:scale-105"
-                                @click="selectRune(rune, true, rune.deckId)"
-                            />
-                        </TransitionGroup>
-                    </template>
-                    <template v-else-if="selectedOptions.View === 'Frames'">
-                        <TransitionGroup name="fade">
-                            <RuneDisplayMedium
-                                v-for="rune in group.runes"
-                                :key="rune.deckId"
-                                :rune="rune"
-                                class="cursor-pointer duration-200 hover:scale-105"
-                                @click="selectRune(rune, true, rune.deckId)"
-                            >
-                                {{ rune.name }}
-                            </RuneDisplayMedium>
-                        </TransitionGroup>
-                    </template>
-                    <div
-                        v-else-if="selectedOptions.View === 'Stacks'"
-                        class="items-centert mb-[180px] flex w-full flex-col content-center items-center md:max-h-[500px] md:flex-wrap"
+                    <TransitionGroup
+                        name="smooth-resize"
+                        tag="div"
+                        class="flex flex-wrap items-center justify-center gap-2"
+                        :class="{
+                            'mb-[180px] flex w-full flex-col flex-wrap content-center items-center md:max-h-[500px]':
+                                selectedOptions.View === 'Stacks',
+                        }"
                     >
-                        <TransitionGroup name="fade">
-                            <RuneDisplayMedium
-                                v-for="rune in group.runes"
-                                :key="rune.deckId"
-                                :rune="rune"
-                                class="-mb-44 cursor-pointer duration-200 hover:scale-105"
-                                @click="selectRune(rune, true, rune.deckId)"
-                            >
-                                {{ rune.name }}
-                            </RuneDisplayMedium>
-                        </TransitionGroup>
-                    </div>
+                        <Component
+                            :is="selectedViewComponent"
+                            v-for="rune in group.runes"
+                            :key="rune.deckId"
+                            :rune="rune"
+                            class="cursor-pointer duration-200 hover:scale-105"
+                            :class="{
+                                '-mb-44': selectedOptions.View === 'Stacks',
+                            }"
+                            @click="selectRune(rune, true, rune.deckId)"
+                        />
+                    </TransitionGroup>
                 </template>
             </div>
             <!-- Export -->
@@ -114,7 +95,7 @@ import { DeckRune, useDeck } from '@src/stores/deckStore'
 import { useInfo } from '@src/stores/infoStore'
 import NoraCostChart from '@src/components/NoraCostChart.vue'
 import { encodeDeck } from '@src/libs/deckstring/deckEncoder'
-import { computed, onMounted, reactive } from 'vue'
+import { computed, onBeforeMount, onMounted, reactive } from 'vue'
 
 const deckStore = useDeck()
 const { selectRune } = useInfo()
@@ -199,13 +180,25 @@ const selectedOptions = reactive({
     Sort: displayOptions.Sort[0],
 })
 
-onMounted(() => {
+onBeforeMount(() => {
     loadSelectedOptions()
 })
 
 function saveSelectedOptions() {
     localStorage.setItem('displayOptions', JSON.stringify(selectedOptions))
 }
+
+const selectedViewComponent = computed(() => {
+    switch (selectedOptions.View) {
+        case 'Icons':
+            return RuneDisplaySmall
+        case 'Frames':
+        case 'Stacks':
+            return RuneDisplayMedium
+        default:
+            return ''
+    }
+})
 
 function loadSelectedOptions() {
     const storedOptions = localStorage.getItem('displayOptions')
