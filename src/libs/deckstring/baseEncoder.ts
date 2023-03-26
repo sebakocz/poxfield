@@ -8,16 +8,18 @@ const BASE62_ALPHABET =
  * the output string is exactly two characters long.
  *
  * @param number The number to be encoded.
+ * @param addPadding Whether to add additional zero to the output string.
  * @returns The Base62 encoded string.
  */
-export const encodeBase62 = (number: number): string => {
+export const encodeBase62 = (number: number, addPadding = true): string => {
     if (number < 0) throw new Error('Number must be positive')
     if (number > 3721)
         throw new Error('Number must be less than or equal to 3721')
 
     const remainder = number % 62
-    const firstChar = BASE62_ALPHABET.charAt(Math.floor(number / 62))
     const secondChar = BASE62_ALPHABET.charAt(remainder)
+    if (!addPadding) return secondChar
+    const firstChar = BASE62_ALPHABET.charAt(Math.floor(number / 62))
     return firstChar + secondChar
 }
 

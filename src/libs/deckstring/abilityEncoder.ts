@@ -1,27 +1,12 @@
 import { DeckRune } from '@src/stores/deckStore'
+import { decodeBase62, encodeBase62 } from '@src/libs/deckstring/baseEncoder'
 
 export type AbilityIndex = 0 | 1 | 2 // Only 3 abilities per level
 export type DecodedAbilities = [AbilityIndex, AbilityIndex]
 
-// Mapping of ability combinations to a single character
-const ABILITY_MAPPING: Record<string, string> = {
-    '00': 'A',
-    '01': 'B',
-    '02': 'C',
-    '11': 'D',
-    '12': 'E',
-    '22': 'F',
-    '10': 'G',
-    '20': 'H',
-    '21': 'I',
-} as const
-
-// Use a type assertion to bypass the circular reference issue
-type EncodedAbilitiesKeys = keyof typeof ABILITY_MAPPING
-
 export const encodeAbilities = (abilities: DecodedAbilities): string => {
-    const key = abilities.sort().join('') as EncodedAbilitiesKeys
-    return ABILITY_MAPPING[key]
+    const key = parseInt(abilities.sort().join(''))
+    return encodeBase62(key, false)
 }
 
 export const getSelectedAbilities = (rune: DeckRune): DecodedAbilities => {
@@ -54,15 +39,14 @@ export const decodeAbilities = (char: string): DecodedAbilities | null => {
     if (char.length !== 1) {
         return null
     }
-    const abilityKey = Object.entries(ABILITY_MAPPING).find(
-        ([_, value]) => value === char
-    )?.[0]
-
-    if (abilityKey) {
-        const [ability1, ability2] = abilityKey
-            .split('')
-            .map((ability) => parseInt(ability) as AbilityIndex)
-        return [ability1, ability2]
+    let abilityKey = decodeBase62(char).toString()
+    if (parseInt(abilityKey) < 10) abilityKey = '0' + abilityKey
+    if (abilityKey !== null) {
+        const [ability1, ability2] = abilityKey.split('')
+        return [
+            parseInt(ability1) as AbilityIndex,
+            parseInt(ability2) as AbilityIndex,
+        ]
     }
 
     return null
