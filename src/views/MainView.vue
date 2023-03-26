@@ -40,9 +40,11 @@
         </div>
     </div>
     <div class="flex-grow overflow-hidden bg-gray-200">
-        <RunesView v-if="currentRouteIndex === 0" />
-        <FilterView v-else-if="currentRouteIndex === 1" />
-        <DeckView v-else-if="currentRouteIndex === 2" />
+        <Transition name="fade">
+            <RunesView v-if="currentRouteIndex === 0" key="runes" />
+            <FilterView v-else-if="currentRouteIndex === 1" key="filter" />
+            <DeckView v-else-if="currentRouteIndex === 2" key="deck" />
+        </Transition>
     </div>
 </template>
 
