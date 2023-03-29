@@ -40,7 +40,7 @@ This deckstring can be broken down into the following sections:
 ### Champions and Abilities
 Champions are a special case since they also have abilities. The abilities are encoded as an additional Base62 character after the champion's ID. The first two characters represent the champion's ID, while the third character represents the encoded abilities.
 
-For example, in the champions section of the example deckstring, AYC represents a champion with ID AY (=2292) and abilities encoded as C (=38 /TODO ???).
+For example, in the champions section of the example deckstring, AYC represents a champion with ID AY (=2292) and abilities encoded as C (=12) which is split index ability indexes 1 & 2.
 
 ## :balance_scale: Legal
 
