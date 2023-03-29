@@ -59,6 +59,10 @@ export const useDeck = defineStore('deckStore', () => {
         return deckRunes.value.filter((r) => r.hash === hash).length
     }
 
+    const clearDeck = () => {
+        deckRunes.value = []
+    }
+
     return {
         deckRunes,
         deckLength,
@@ -66,5 +70,6 @@ export const useDeck = defineStore('deckStore', () => {
         removeRune,
         countRune,
         sortedRunes,
+        clearDeck,
     }
 })
