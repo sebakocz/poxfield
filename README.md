@@ -64,7 +64,12 @@ If you want to contribute, simply run these:
 ```
 > npm install
 > npm run dev
+
+# Deployment
+> chmod +x deploy.sh
+> npm run deploy
 ```
+
 
 ## :derelict_house: Design Plan
 
