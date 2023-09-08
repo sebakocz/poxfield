@@ -5,7 +5,7 @@ export type AbilityIndex = 0 | 1 | 2 // Only 3 abilities per level
 export type DecodedAbilities = [AbilityIndex, AbilityIndex]
 
 export const encodeAbilities = (abilities: DecodedAbilities): string => {
-    const key = parseInt(abilities.sort().join(''))
+    const key = parseInt(abilities.join(''))
     return encodeBase62(key, false)
 }
 
