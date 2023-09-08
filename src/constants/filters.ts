@@ -15,7 +15,14 @@ export type CatagoryFilter = {
 
 export type NumberFilter = {
     label: string
-    key: 'noraCost' | 'damage' | 'defense' | 'hitPoints' | 'speed'
+    key:
+        | 'noraCost'
+        | 'damage'
+        | 'defense'
+        | 'hitPoints'
+        | 'speed'
+        | 'minRng'
+        | 'maxRng'
     condition: 'moreThan' | 'lessThan' | 'moreOrEqual' | 'lessOrEqual' | 'equal'
     query: number
 }
@@ -106,6 +113,18 @@ export const numberFilters: NumberFilter[] = [
     {
         label: 'Speed',
         key: 'speed',
+        condition: 'moreOrEqual',
+        query: 0,
+    },
+    {
+        label: 'Min Range',
+        key: 'minRng',
+        condition: 'moreOrEqual',
+        query: 0,
+    },
+    {
+        label: 'Max Range',
+        key: 'maxRng',
         condition: 'moreOrEqual',
         query: 0,
     },
