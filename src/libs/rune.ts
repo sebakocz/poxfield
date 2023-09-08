@@ -15,12 +15,10 @@ export const setAbility = (
     }
     abilitySet.abilities.forEach((ability, index) => {
         const isSelected = index === abilityIndex
-        if (ability.selected) {
-            rune.noraCost -= ability.noraCost
-        }
-        ability.selected = isSelected
-        if (ability.selected) {
-            rune.noraCost += ability.noraCost
+
+        if (ability.selected !== isSelected) {
+            rune.noraCost += isSelected ? ability.noraCost : -ability.noraCost
+            ability.selected = isSelected
         }
     })
 }
