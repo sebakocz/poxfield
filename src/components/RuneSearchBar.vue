@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full bg-gray-200 p-3">
+    <div class="w-full bg-gray-200 p-3 dark:bg-gray-800">
         <input
             type="text"
             class="w-full rounded p-2 text-center shadow lg:w-10/12"

@@ -6,9 +6,9 @@
             @click="closeOnClickOutside($event)"
         >
             <div
-                class="scrollbar-hide relative h-full overflow-auto rounded bg-white shadow-lg sm:w-[70%]"
+                class="scrollbar-hide relative h-full overflow-auto rounded bg-white shadow-lg dark:bg-gray-800 sm:w-[70%]"
             >
-                <div class="sticky top-0 z-20 bg-white p-2">
+                <div class="sticky top-0 z-20 bg-white p-2 dark:bg-gray-800">
                     <h2 class="text-xl font-bold">{{ selectedRune.name }}</h2>
                 </div>
                 <div class="flex-grow">
@@ -24,7 +24,7 @@
                             </span>
                             <div class="my-2 flex flex-col">
                                 <button
-                                    class="my-1 rounded bg-blue-600 p-2 font-bold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                                    class="my-1 rounded bg-blue-600 p-2 font-bold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-700 dark:hover:bg-gray-800"
                                     :disabled="
                                         deckStore.countRune(
                                             selectedRune.hash
@@ -44,7 +44,7 @@
                                 </button>
                                 <button
                                     v-if="infoStore.isDeck"
-                                    class="my-1 rounded bg-red-600 p-2 font-bold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                                    class="my-1 rounded bg-red-600 p-2 font-bold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-700 dark:hover:bg-gray-800"
                                     :disabled="
                                         deckStore.countRune(
                                             selectedRune.hash
@@ -133,7 +133,7 @@
                 </p>
                 <div class="sticky bottom-0">
                     <button
-                        class="w-full rounded-none bg-gray-300 font-bold"
+                        class="w-full rounded-none bg-gray-300 p-2 font-bold hover:bg-gray-400 dark:bg-gray-700 dark:hover:bg-gray-800"
                         @click="infoStore.clearSelectedRune()"
                     >
                         Close

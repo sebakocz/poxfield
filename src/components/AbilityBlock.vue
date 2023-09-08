@@ -11,18 +11,18 @@
                     />
                 </div>
                 <div
-                    class="w-full rounded bg-gray-50 p-2"
+                    class="w-full rounded bg-gray-50 p-2 dark:bg-gray-700"
                     :class="{
-                        'bg-yellow-50 outline outline-orange-500':
+                        'bg-yellow-50 outline outline-orange-500 dark:bg-yellow-800':
                             ability.selected,
-                        'cursor-pointer hover:bg-gray-100':
+                        'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600':
                             !ability.selected && 'default' in ability,
                     }"
                     @click="selectAbility(abilities.indexOf(ability))"
                 >
                     <div class="mb-1 flex gap-1">
                         <span
-                            class="flex-grow text-sm font-semibold text-gray-600"
+                            class="flex-grow text-sm font-semibold text-gray-600 dark:text-gray-300"
                             >{{ ability.name }}
                             {{ ability.level ? `(${ability.level})` : '' }}
                         </span>

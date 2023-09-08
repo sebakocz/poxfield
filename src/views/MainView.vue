@@ -3,9 +3,9 @@
         <div
             v-for="route in navRoutes"
             :key="route.name"
-            class="flex w-full items-center justify-center rounded-t bg-gray-200 p-3 text-xl sm:duration-200"
+            class="flex w-full items-center justify-center rounded-t bg-gray-200 p-3 text-xl dark:bg-gray-800 sm:duration-200"
             :class="{
-                'mt-auto h-14 cursor-pointer bg-gray-50 hover:h-16 hover:bg-gray-300':
+                'mt-auto h-14 cursor-pointer bg-gray-50 hover:h-16 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700':
                     currentRouteIndex !== navRoutes.indexOf(route),
                 'h-16': currentRouteIndex === navRoutes.indexOf(route),
             }"
@@ -39,7 +39,7 @@
             </transition>
         </div>
     </div>
-    <div class="flex-grow overflow-hidden bg-gray-200">
+    <div class="flex-grow overflow-hidden bg-gray-200 dark:bg-gray-800">
         <RunesView v-if="currentRouteIndex === 0" />
         <FilterView v-else-if="currentRouteIndex === 1" />
         <DeckView v-else-if="currentRouteIndex === 2" />
